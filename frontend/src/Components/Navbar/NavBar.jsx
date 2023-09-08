@@ -1,16 +1,18 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import "./NavBar.css";
 import { userContext, authContext } from "../../Store/Context";
-import { Link } from "react-router-dom";
-import axios from '../../Constants/axios'
+import { Link, Navigate } from "react-router-dom";
+import axios from "../../Constants/axios";
 
-import {ShoppingCart, UserCircle, Heart} from 'lucide-react'
+import { ShoppingCart, UserCircle, Heart } from "lucide-react";
+import { Tooltip } from "react-tooltip";
 
+function NavBar(props) {
+  const { loadNav } = props;
 
-
-function NavBar() {
   const [hambtn, setHambtn] = useState(false);
-  const [cartItems, setCartItems] = useState(0)
+  const [cartItems, setCartItems] = useState(0);
+  const [loggedOut, setLoggedOut] = useState(false);
 
   const expandMenu = useRef(null);
   const expandMid = useRef(null);
@@ -43,14 +45,24 @@ function NavBar() {
 
   useEffect(() => {
     if (user == true) {
-      axios.get('shop/get-cart-items/true').then((response)=>{
-        let data = response.data
-        const {count} = data
-        setCartItems(count)
-      })
+      axios.get("shop/get-cart-items/true").then((response) => {
+        let data = response.data;
+        const { count } = data;
+        setCartItems(count);
+      });
     }
-  })
+  });
 
+  const logOut = () => {
+    axios.defaults.xsrfCookieName = "csrftoken";
+    axios.defaults.xsrfHeaderName = "X-CSRFToken";
+    axios.post("auth/logout/").then((response) => {
+      console.log(response.data);
+      setLoggedOut(!logOut);
+      loadNav()
+      window.location.href = '/'
+    });
+  };
 
   return (
     <>
@@ -100,19 +112,34 @@ function NavBar() {
             <div className="wish-list">
               <Link to="/favorites/">
                 {/* <i className="fa-regular fa-heart fa-xl"></i> */}
-                <Heart/>
+                <Heart />
               </Link>
             </div>
             <div className="cart">
-              { cartItems > 0 ? <span className="cart-items">{cartItems}</span> : null}
+              {cartItems > 0 ? (
+                <span className="cart-items">{cartItems}</span>
+              ) : null}
               <Link to="/cart/">
                 {/* <i className="fa-solid fa-cart-shopping fa-xl"></i> */}
-                <ShoppingCart/>
+                <ShoppingCart />
               </Link>
             </div>
             <div className="profile-info">
-                {/* <i className="fa-regular fa-user fa-xl"></i> */}
-                <UserCircle size={30} strokeWidth={1.5}/>
+              {/* <i className="fa-regular fa-user fa-xl"></i> */}
+              <button data-tooltip-id="profile-btn" className="profile-btn">
+                <UserCircle size={30} strokeWidth={1.5} />
+              </button>
+              <Tooltip
+                className="profile-tooltip"
+                clickable
+                id="profile-btn"
+                openOnClick
+                content={
+                  <button className="btn btn-dark" onClick={logOut}>
+                    Logout
+                  </button>
+                }
+              />
             </div>
           </div>
         ) : (
@@ -138,6 +165,7 @@ function NavBar() {
           </div>
         )}
       </nav>
+      {/* {loggedOut && <Navigate to="/" />} */}
     </>
   );
 }

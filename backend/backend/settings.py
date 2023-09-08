@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'django.contrib.sites',
 
-    'api',
     'home',
     'authentication',
     'shop',

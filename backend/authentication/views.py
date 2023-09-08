@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -52,9 +53,11 @@ def check_user_is_authenticated(request):
     return Response(authenticated, status=status.HTTP_200_OK)
 
 
+@api_view(['POST'])
 def logout_user(request):
     logout(request)
     return Response({'message': 'User Logged Out Successfully'}, status=status.HTTP_200_OK)
+    # return redirect(reverse('home:home'))
 
 
 

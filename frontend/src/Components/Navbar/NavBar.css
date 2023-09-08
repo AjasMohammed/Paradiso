@@ -262,3 +262,11 @@ li.line-effect::after{
     border-radius: 35px;
     padding-inline: 5px;
 }
+.profile-btn{
+  background: none;
+  border: 0;
+  color: #fff;
+}
+.profile-info .profile-tooltip{
+  padding: 1rem;
+}

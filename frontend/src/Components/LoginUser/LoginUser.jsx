@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./LoginUser.css";
 import axios from "../../Constants/axios";
-import { Navigate } from "react-router-dom";
+
 
 function Register() {
   const [username, setUsername] = useState("");

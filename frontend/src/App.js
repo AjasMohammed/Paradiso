@@ -11,22 +11,29 @@ import FavoriteItems from "./Pages/FavoriteItems/FavoriteItems";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "./Constants/axios";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { userContext } from "./Store/Context";
 
 
 function App() {
   const { setUser } = useContext(userContext);
+  const [refresh, setrefresh] = useState(false)
 
   useEffect(() => {
     axios.get("auth/check-user/").then((response) => {
       setUser(response.data);
     });
   });
+
+  const refreshNavbar = () => {
+    setrefresh(!refresh)
+  }
+
+
   return (
     <div className="App">
       <Router>
-      <NavBar />
+      <NavBar loadNav={refreshNavbar} />
         <Routes>
           <Route exact path="/" Component={Home} />
           <Route path="/auth/register" Component={UserAuth} />
