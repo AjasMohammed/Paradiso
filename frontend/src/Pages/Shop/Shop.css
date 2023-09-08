@@ -1,0 +1,16 @@
+.category-title {
+  text-transform: uppercase;
+  text-align: left;
+  margin: 1rem;
+  margin-top: 4rem;
+  font-size: 2rem;
+  max-width: fit-content;
+}
+.category-link {
+  text-decoration: none;
+  color: black;
+}
+
+.product-row {
+  margin-bottom: 4rem;
+}

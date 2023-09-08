@@ -1,0 +1,37 @@
+.image-section img {
+  height: 20rem;
+  max-width: 20rem;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.on-top {
+  align-self: flex-start;
+}
+.detailes {
+  text-align: start;
+  height: 100%;
+  padding: 1rem;
+}
+.prod-title {
+  font-weight: 600;
+}
+.prod-description {
+  margin-top: 2rem;
+}
+
+.fav-btn{
+  border: none;
+}
+.heart-icon{
+  fill: #000;
+}
+@media (max-width: 992px) {
+  .container {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .on-top {
+    align-self: center;
+  }
+}

@@ -1,0 +1,26 @@
+.card {
+  height: 17rem;
+  width: 13rem;
+}
+.card > img {
+  object-fit: contain;
+  height: 60%;
+  padding: 20px;
+  transition: all 200ms linear;
+}
+.card > img:hover {
+  transform: scale(1.1);
+  transition: all 200ms linear;
+}
+
+.card-body {
+  text-align: start;
+}
+.prod-name {
+  font-weight: 600;
+  text-align: center;
+}
+
+.prod-link {
+  text-decoration: none;
+}

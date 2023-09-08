@@ -1,0 +1,28 @@
+footer{
+    background-color: var(--primery-bg-color);
+    color: white;
+    width: 100%;
+
+    display: flex;
+    padding: 2rem;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin-top: 3rem;
+}
+
+.about{
+    display: flex;
+    flex-direction: column;
+}
+.about-title{
+    align-self: flex-start;
+    text-decoration: underline;
+}
+.about-content{
+    text-align: justify;
+    font-size: 1rem;
+    font-weight: 400;
+}

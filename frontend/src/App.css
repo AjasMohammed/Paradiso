@@ -1,0 +1,31 @@
+:root{
+  --primery-bg-color: #2f2f2f
+}
+body{
+  background-color: lightgray;
+}
+.App {
+  text-align: center;
+  margin-top: 6rem;
+  font-weight: 600;
+}
+.container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.line-effect::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: black;
+  transform: scaleX(0);
+  transition: transform 200ms ease-in-out;
+}
+.line-effect:hover::after {
+  transform: scaleX(1);
+  transform-origin: center;
+  transition: transform 200ms ease-in-out;
+}
