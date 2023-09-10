@@ -1,7 +1,7 @@
-:root{
-  --primery-bg-color: #2f2f2f
+:root {
+  --primery-bg-color: #2f2f2f;
 }
-body{
+body {
   background-color: lightgray;
 }
 .App {
@@ -9,11 +9,11 @@ body{
   margin-top: 6rem;
   font-weight: 600;
 }
-.container{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .line-effect::after {
   content: "";
@@ -24,8 +24,16 @@ body{
   transform: scaleX(0);
   transition: transform 200ms ease-in-out;
 }
-.line-effect:hover::after {
+.line-effect:not(:has(> a.active)):hover::after {
   transform: scaleX(1);
   transform-origin: center;
   transition: transform 200ms ease-in-out;
+}
+
+.card-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }

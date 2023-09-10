@@ -1,5 +1,7 @@
 import React from 'react'
 import './Footer.css'
+import {Instagram, Facebook, Twitter} from 'lucide-react'
+import { Link } from 'react-router-dom';
 
 function Footer() {
   return (
@@ -14,9 +16,15 @@ function Footer() {
         </p>
       </div>
       <div className="socials col-md-6 col-sm-12">
-        <h5>INSTAGRAM</h5>
-        <h5>FACEBOOK</h5>
-        <h5>TWITTER</h5>
+        <Link to={''}>
+        <Instagram/>
+        </Link>
+        <Link to={''}>
+        <Facebook/>
+        </Link>
+        <Link to={''}>
+        <Twitter/>
+        </Link>
       </div>
     </footer>
   );

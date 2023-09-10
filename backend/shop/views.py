@@ -11,6 +11,7 @@ from io import BytesIO
 
 from math import ceil
 import requests
+import random
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
@@ -30,21 +31,51 @@ class ProductsView(APIView):
                 ordered_products[category_name] = []
             ordered_products[category_name].append(item)
 
-        products_dict = {}
-        for category, items in ordered_products.items():
-            rows = ceil(len(items)/5)
-            n = 0
-            product_row = []
+        # products_dict = {}
+        # for category, items in ordered_products.items():
+        #     rows = ceil(len(items)/5)
+        #     n = 0
+        #     product_row = []
 
-            for i in range(rows):
-                prod = items[n:n+5]
-                n += 5
-                product_row.append(prod)
-            if category not in products_dict.keys():
-                products_dict[category] = []
-            products_dict[category].append(product_row)
+        #     for i in range(rows):
+        #         prod = items[n:n+5]
+        #         n += 5
+        #         product_row.append(prod)
+        #     if category not in products_dict.keys():
+        #         products_dict[category] = []
+        #     products_dict[category].append(product_row)
               
-        return Response(products_dict, status=status.HTTP_200_OK)
+        return Response(ordered_products, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def category_products(request):
+    name = request.query_params.get('category')
+    category = Category.objects.get(name=name)
+    products = Product.objects.filter(category=category)
+    serializer = ProductSerializer(products, many=True)
+
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def sample_images(requests):
+    images = ProductImage.objects.all()
+    if len(images) % 2 == 0:
+        n = len(images)//2
+    else:
+        n = (len(images)+1) // 2
+
+    random_images = random.choices(images, k=n)
+    serializer = ProductImageSerializer(random_images, many=True)
+
+    data = []
+
+    for i in range(0, len(serializer.data), 2):
+        data.append([serializer.data[i], serializer.data[i+1]])
+
+    return Response(data)
+
 
 
 @api_view(['GET'])
@@ -78,6 +109,7 @@ def add_to_cart(request, id):
     return Response({'message': 'Product Added'}, status=status.HTTP_200_OK)
 
 
+@login_required
 @api_view(['POST'])
 def remove_from_cart(request, id):
     product = Product.objects.get(id=id)
@@ -88,6 +120,7 @@ def remove_from_cart(request, id):
     return Response({'message': 'Removed from Cart'})
 
 
+@login_required
 @api_view(['GET'])
 def get_cart_items(request, is_count):
     try:
@@ -104,6 +137,7 @@ def get_cart_items(request, is_count):
         return Response({'message': 'Cart is Empty'})
 
 
+@login_required
 @api_view(['GET'])
 def check_in_cart(request, id):
     cart = get_object_or_404(Cart, user=request.user)

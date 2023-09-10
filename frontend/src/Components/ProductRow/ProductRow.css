@@ -1,17 +1,9 @@
-.prod-row{
-    display: flex;
-    justify-content: center;
-    gap: 3em;
+.prod-row ul{
+    gap: 1rem;
 }
-.carousel-control-prev{
-    justify-content: flex-start;
-    padding-left: 1rem;
-}
-.carousel-control-next{
-    justify-content: flex-end;
-    padding-right: 1rem;
-}
+@media(min-width:880px){
+    .prod-row ul{
+        margin-inline: 4em;
+    }
 
-.carousel-btn{
-    width: auto;
 }

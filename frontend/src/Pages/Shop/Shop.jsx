@@ -22,9 +22,9 @@ function Shop() {
         return (
           <div key={index} className="product-row">
             <h1 className="category-title line-effect">
-              <Link to={'#'} className='category-link'>{category}</Link>
+              <Link to={`/shop/category/${category}`} className='category-link'>{category}</Link>
             </h1>
-            <ProductRow productRow={productRow[0]} id={index} />
+            <ProductRow productRow={productRow} id={index} />
           </div>
         );
       })

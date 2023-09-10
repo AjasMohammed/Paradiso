@@ -16,10 +16,10 @@ function Cart() {
     });
   }, []);
   return (
-    <div className="cart-view">
+    <div className="card-items">
       {cartItems &&
         cartItems.map((item) => {
-          return <ProductCard key={item.id} product={item.product}/>;
+          return <ProductCard key={item.id} product={item.product} />;
         })}
     </div>
   );

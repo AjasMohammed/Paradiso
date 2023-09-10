@@ -9,6 +9,7 @@ import { Heart } from "lucide-react";
 
 function ProductView() {
   const param = useParams();
+  
   const [product, setProduct] = useState(null);
   const [images, setImages] = useState(null);
   const [isFavorite, setIsFavorite] = useState(null);

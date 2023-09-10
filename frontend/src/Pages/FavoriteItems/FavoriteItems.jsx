@@ -15,16 +15,12 @@ function FavoriteItems() {
         })
     },[])
   return (
-    <div className='favorite-items'>
-        {
-            products.map((product) => {
-                return(
-                    <ProductCard key={product.id} product={product}/>
-                )
-            })
-        }
+    <div className="card-items">
+      {products.map((product) => {
+        return <ProductCard key={product.id} product={product} />;
+      })}
     </div>
-  )
+  );
 }
 
 export default FavoriteItems

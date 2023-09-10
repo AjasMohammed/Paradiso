@@ -19,8 +19,17 @@ nav {
 
   z-index: 999999;
 }
-.auth-user-btn:hover{
+.auth-user-btn:hover {
   color: lightgray;
+}
+.line-effect:has(> a.active)::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: lightgray;
+  transform: scaleX(1);
+  transition: transform 100ms ease-in-out;
 }
 /* -----------HAMBURGER BUTTON----------------- */
 .hamburger-btn {
@@ -189,7 +198,7 @@ nav a {
     width: 80%;
     height: 50px;
   }
-  .profile{
+  .profile {
     justify-self: self-start;
   }
   .mid {
@@ -238,35 +247,35 @@ nav a {
 .auth-btn .btn:first-child {
   border-right: 1px solid black;
 }
-.auth-btn .btn:active{
+.auth-btn .btn:active {
   background-color: transparent;
 }
-.auth-btn .btn:hover{
+.auth-btn .btn:hover {
   color: var(--search-field-bg-color);
 }
-li.line-effect::after{
+li.line-effect::after {
   background-color: lightgray;
 }
 
-.cart{
+.cart {
   position: relative;
   cursor: pointer;
 }
-.cart-items{
-      position: absolute;
-    right: -8px;
-    top: -2px;
-    font-size: 12px;
-    background-color: black;
-    margin: 0;
-    border-radius: 35px;
-    padding-inline: 5px;
+.cart-items {
+  position: absolute;
+  right: -8px;
+  top: -2px;
+  font-size: 12px;
+  background-color: black;
+  margin: 0;
+  border-radius: 35px;
+  padding-inline: 5px;
 }
-.profile-btn{
+.profile-btn {
   background: none;
   border: 0;
   color: #fff;
 }
-.profile-info .profile-tooltip{
+.profile-info .profile-tooltip {
   padding: 1rem;
 }

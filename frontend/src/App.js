@@ -7,6 +7,7 @@ import Footer from "./Components/Footer/Footer";
 import ProductView from "./Pages/ProductView/ProductView";
 import Cart from "./Pages/CartItems/Cart";
 import FavoriteItems from "./Pages/FavoriteItems/FavoriteItems";
+import CategoryPage from "./Pages/CategoryPage/CategoryPage";
 
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -41,6 +42,7 @@ function App() {
           <Route path="/shop/product-view/:id" Component={ProductView} />
           <Route path="/cart/" Component={Cart} />
           <Route path="/favorites/" Component={FavoriteItems} />
+          <Route path="/shop/category/:categoryName" Component={CategoryPage} />
         </Routes>
       <Footer />
       </Router>

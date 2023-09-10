@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import "./NavBar.css";
 import { userContext, authContext } from "../../Store/Context";
-import { Link, Navigate } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import axios from "../../Constants/axios";
 
 import { ShoppingCart, UserCircle, Heart } from "lucide-react";
@@ -58,7 +58,7 @@ function NavBar(props) {
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
     axios.post("auth/logout/").then((response) => {
       console.log(response.data);
-      setLoggedOut(!logOut);
+      setLoggedOut(!loggedOut);
       loadNav()
       window.location.href = '/'
     });
@@ -79,16 +79,16 @@ function NavBar(props) {
           <div className="menu" ref={expandMenu}>
             <ul>
               <li className="line-effect">
-                <Link to="/">HOME</Link>
+                <NavLink to="/">HOME</NavLink>
               </li>
               <li className="line-effect">
-                <Link to="/shop">SHOP</Link>
+                <NavLink to="/shop">SHOP</NavLink>
               </li>
               <li className="line-effect">
-                <Link to="#">CONTACT</Link>
+                <NavLink to="/contact">CONTACT</NavLink>
               </li>
               <li className="line-effect">
-                <Link to="#">ABOUT</Link>
+                <NavLink to="/about">ABOUT</NavLink>
               </li>
             </ul>
           </div>
@@ -165,7 +165,6 @@ function NavBar(props) {
           </div>
         )}
       </nav>
-      {/* {loggedOut && <Navigate to="/" />} */}
     </>
   );
 }

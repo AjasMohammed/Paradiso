@@ -1,7 +1,7 @@
 import React from 'react'
 import './ProductCard.css'
 import { BASE_URL } from '../../Constants/config';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import TruncateText from '../TruncateText/TruncateText';
 
 
@@ -15,7 +15,7 @@ function ProductCard(props) {
 
   return (
     <>
-      <NavLink to={"/shop/product-view/" + product.id} className="prod-link">
+      <Link to={"/shop/product-view/" + product.id} className="prod-link">
         <div className="card">
           <img
             src={BASE_URL + product.productimage_set[0].image}
@@ -32,7 +32,7 @@ function ProductCard(props) {
             </p>
           </div>
         </div>
-      </NavLink>
+      </Link>
     </>
   );
 }

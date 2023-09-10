@@ -2,66 +2,40 @@ import React, { useEffect, useState } from "react";
 import "./ProductRow.css";
 import ProductCard from "../ProductCard/ProductCard";
 
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
 function ProductRow(props) {
   const { id, productRow } = props;
 
-  const [carousel, setCarousel] = useState(false)
-  useEffect(() => {
-    if (productRow.length > 1){
-      setCarousel(true)
-    }
-  })
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 1500 },
+      items: 8,
+    },
+    desktop: {
+      breakpoint: { max: 1500, min: 880 },
+      items: 5,
+    },
+    tablet: {
+      breakpoint: { max: 880, min: 520 },
+      items: 4,
+    },
+    mobile: {
+      breakpoint: { max: 520, min: 0 },
+      items: 2,
+    },
+  };
 
   return (
-    <div>
-      <div id={id} className="carousel carousel-dark slide">
-        <div className="carousel-inner">
-          {productRow.map((row, index) => {
-            return (
-              <div
-                key={index}
-                className={`carousel-item ${index === 0 ? "active" : ""}`}
-                data-bs-interval="10000"
-              >
-                <div className="prod-row">
-                  {row.map((product) => {
-                    return <ProductCard key={product.id} product={product} />;
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        { carousel &&
-          <>
-            <button
-              className="carousel-control-prev carousel-btn"
-              type="button"
-              data-bs-target={`#${id}`}
-              data-bs-slide="prev"
-            >
-              <span
-                className="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span className="visually-hidden">Previous</span>
-            </button>
-            <button
-              className="carousel-control-next carousel-btn"
-              type="button"
-              data-bs-target={`#${id}`}
-              data-bs-slide="next"
-            >
-              <span
-                className="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span className="visually-hidden">Next</span>
-            </button>
-          </>
-        }
-      </div>
-    </div>
+    <Carousel responsive={responsive} infinite={true} className="prod-row" centerMode={true} draggable={false}>
+      {
+        productRow.map(product => {
+          return <ProductCard key={product.id} product={product} />
+        })
+      }
+    </Carousel>
+   
   );
 }
 
