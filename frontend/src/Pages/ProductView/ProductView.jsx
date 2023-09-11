@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./ProductView.css";
 import { useParams } from "react-router-dom";
 import axios from "../../Constants/axios";
@@ -6,9 +6,11 @@ import axios from "../../Constants/axios";
 import { BASE_URL } from "../../Constants/config";
 
 import { Heart } from "lucide-react";
+import { userContext } from "../../Store/Context";
 
 function ProductView() {
   const param = useParams();
+  const {user} = useContext(userContext)
   
   const [product, setProduct] = useState(null);
   const [images, setImages] = useState(null);
@@ -21,6 +23,7 @@ function ProductView() {
   });
 
   useEffect(() => {
+    console.log(user);
     axios.defaults.xsrfCookieName = "csrftoken";
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
     axios.get(`shop/product/${param.id}`).then((response) => {
@@ -29,14 +32,17 @@ function ProductView() {
       setImages(data.productimage_set);
     });
 
-    axios.get(`shop/check-in-cart/${param.id}`).then((response) => {
-      setInCart(response.data);
-    });
+    if(user !== false){
+          console.log(user);
 
-    axios.get(`shop/view-favorite?id=${param.id}`).then((response) => {
-      setIsFavorite(response.data);
-      console.log(response.data);
-    });
+          axios.get(`shop/check-in-cart/${param.id}`).then((response) => {
+            setInCart(response.data);
+          });
+
+          axios.get(`shop/view-favorite?id=${param.id}`).then((response) => {
+            setIsFavorite(response.data);
+          });
+    }
   }, []);
 
   const addToCart = () => {

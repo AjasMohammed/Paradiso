@@ -140,18 +140,22 @@ def get_cart_items(request, is_count):
 @login_required
 @api_view(['GET'])
 def check_in_cart(request, id):
-    cart = get_object_or_404(Cart, user=request.user)
     try:
+        cart = get_object_or_404(Cart, user=request.user)
         cart_items = get_object_or_404(CartItem, cart=cart, product_id = id)
         return Response(True)
     except:
         return Response(False)
 
+
 @login_required
 @api_view(['GET'])
 def view_favorite(request):
     user = request.user
-    favorite = Favorite.objects.get(user=user)
+    try:
+        favorite = Favorite.objects.get(user=user)
+    except Exception as e:
+        return Response(False)
     prod_id = request.query_params.get('id')
     print(prod_id)
 

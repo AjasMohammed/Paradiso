@@ -24,7 +24,7 @@ function App() {
     axios.get("auth/check-user/").then((response) => {
       setUser(response.data);
     });
-  });
+  },[refresh]);
 
   const refreshNavbar = () => {
     setrefresh(!refresh)

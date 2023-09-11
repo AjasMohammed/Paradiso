@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from authentication.models import CustomUser
 
 
 class Category(models.Model):
@@ -54,7 +54,7 @@ class ProductImage(models.Model):
 
 
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='CartItem')
 
     def __str__(self):
@@ -70,7 +70,7 @@ class CartItem(models.Model):
 
 
 class Favorite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product)
 
     def __str__(self):
