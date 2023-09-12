@@ -6,16 +6,17 @@ import axios from "../../Constants/axios";
 import { BASE_URL } from "../../Constants/config";
 
 import { Heart } from "lucide-react";
-import { userContext } from "../../Store/Context";
+import { authContext, userContext } from "../../Store/Context";
 
 function ProductView() {
   const param = useParams();
-  const {user} = useContext(userContext)
-  
+  const { user } = useContext(userContext);
+  const { setAuth } = useContext(authContext);
+
   const [product, setProduct] = useState(null);
   const [images, setImages] = useState(null);
   const [isFavorite, setIsFavorite] = useState(null);
-  const [inCart, setInCart] = useState(null);
+  const [inCart, setInCart] = useState(false);
 
   const rupeeFormatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -32,24 +33,29 @@ function ProductView() {
       setImages(data.productimage_set);
     });
 
-    if(user !== false){
-          console.log(user);
+    if (user !== false && user !== null) {
+      console.log(user);
 
-          axios.get(`shop/check-in-cart/${param.id}`).then((response) => {
-            setInCart(response.data);
-          });
+      axios.get(`shop/check-in-cart/${param.id}`).then((response) => {
+        setInCart(response.data);
+      });
 
-          axios.get(`shop/view-favorite?id=${param.id}`).then((response) => {
-            setIsFavorite(response.data);
-          });
+      axios.get(`shop/view-favorite?id=${param.id}`).then((response) => {
+        setIsFavorite(response.data);
+      });
     }
   }, []);
 
   const addToCart = () => {
-    axios.post(`shop/add-to-cart/${param.id}`).then((response) => {
-      console.log(response.data);
-      setInCart(true);
-    });
+    if (user === true && user !== null) {
+      axios.post(`shop/add-to-cart/${param.id}`).then((response) => {
+        console.log(response.statusText);
+        setInCart(true);
+      });
+    } else {
+      setAuth("login");
+      window.location.href = "/auth/register";
+    }
   };
   const removeFromCart = () => {
     axios.post(`shop/remove-from-cart/${param.id}`).then((response) => {
@@ -59,21 +65,25 @@ function ProductView() {
   };
 
   useEffect(() => {
-    addToFavorite();
+    if (user === true) {
+      addToFavorite();
+    }else{
+      setIsFavorite(false)
+    }
   }, [isFavorite]);
 
   const addToFavorite = () => {
-    if (isFavorite === true) {
-      axios
-        .post(`shop/add-to-favorite/${param.id}`)
+      if (isFavorite === true) {
+        axios
+          .post(`shop/add-to-favorite/${param.id}`)
 
-        .then((response) => console.log(response.data));
-    } else if (isFavorite === false) {
-      axios
-        .post(`shop/remove-from-favorite/${param.id}`)
+          .then((response) => console.log(response.data));
+      } else if (isFavorite === false) {
+        axios
+          .post(`shop/remove-from-favorite/${param.id}`)
 
-        .then((response) => console.log(response.data));
-    }
+          .then((response) => console.log(response.data));
+      }
   };
 
   return (

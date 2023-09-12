@@ -77,7 +77,6 @@ def sample_images(requests):
     return Response(data)
 
 
-
 @api_view(['GET'])
 def product_view(request, id):
     product = Product.objects.get(id = id)

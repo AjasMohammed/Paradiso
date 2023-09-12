@@ -75,3 +75,18 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Favorite"
+
+
+class Order(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    address = models.TextField(max_length=10000)
+    phone = models.CharField(max_length=10)
+    is_paid = models.BooleanField(default=False)
+    is_delivered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user}-{self.pk}"
+
+
