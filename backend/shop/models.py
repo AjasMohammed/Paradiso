@@ -27,8 +27,6 @@ class Product(models.Model):
 
     # rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     likes = models.PositiveIntegerField(default=0)
-    
-    
 
     class Meta:
         ordering = ['id']
@@ -56,14 +54,26 @@ class ProductImage(models.Model):
 class Cart(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='CartItem')
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def update_total(self):
+        total = self.cartitem_set.aggregate(total=models.Sum(models.F('product__price') * models.F('quantity')))['total']
+        self.total = total if total is not None else 0
+        self.save()
 
     def __str__(self):
         return f'Cart for {self.user.username}'
+        
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Update the total price of the cart whenever a CartItem is saved
+        self.cart.update_total()
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name} in {self.cart.user.username}'s cart"
@@ -79,10 +89,12 @@ class Favorite(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product)
+    products = models.ManyToManyField(Product, through='OrderItem')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     address = models.TextField(max_length=10000)
+    city = models.CharField(max_length=1000)
     phone = models.CharField(max_length=10)
+    zipcode = models.CharField(max_length=8)
     is_paid = models.BooleanField(default=False)
     is_delivered = models.BooleanField(default=False)
 
@@ -90,3 +102,9 @@ class Order(models.Model):
         return f"{self.user}-{self.pk}"
 
 
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.pk}-{self.order.pk}"

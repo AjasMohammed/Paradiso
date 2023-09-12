@@ -74,10 +74,19 @@ class OrderAdmin(admin.ModelAdmin):
     #     return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
+class CartItemInline(admin.TabularInline):
+    model = CartItem
+    extra = 0
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_diplay = ['user']
+    inlines = [CartItemInline]
 
 
 admin.site.register(Category)
 admin.site.register(Tag)
 admin.site.register(CartItem)
-admin.site.register(Cart)
 admin.site.register(Favorite)
+admin.site.register(OrderItem)

@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import axios from '../Constants/axios'
 
 export const userContext = createContext(null);
 
@@ -21,4 +22,16 @@ function CheckAuth({ children }) {
   );
 }
 
-export { CheckUser, CheckAuth };
+export const cartContext = createContext(null);
+function CartItems({ children }) {
+  const [cartItems, setCartItems] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+  
+  return (
+    <cartContext.Provider value={{ cartItems, setCartItems, totalAmount, setTotalAmount }}>
+      {children}
+    </cartContext.Provider>
+  );
+}
+
+export { CheckUser, CheckAuth, CartItems };

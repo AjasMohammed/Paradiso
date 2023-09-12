@@ -124,14 +124,20 @@ def remove_from_cart(request, id):
 def get_cart_items(request, is_count):
     try:
         cart  = Cart.objects.prefetch_related('cartitem_set').get(user=request.user)
+        
         items = cart.cartitem_set.all()
         if is_count == 'true':
             item_no = items.count()
             return Response({'count':item_no})
         elif is_count == 'false':
             serializer = CartItemSerializer(items, many=True)
+
+            context = {
+                'data' : serializer.data,
+                'total': cart.total
+            }
         
-        return Response(serializer.data)
+        return Response(context)
     except :
         return Response({'message': 'Cart is Empty'})
 
@@ -196,7 +202,28 @@ def remove_from_favorite(request, id):
 
 
 
+@login_required
+@api_view(['POST'])
+def place_order(request):
+    user = request.user
+    data = request.data
+    data['user'] = user.pk
 
+    serializer = OrderSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        print(serializer.errors)
+        serializer.save()
+
+    return Response({'message': 'Order Placed Successfully.'}, status=status.HTTP_200_OK)
+
+
+# @login_required
+# @api_view('GET')
+# def view_orders(request):
+#     user = request.user
+#     Order = 
 
 def addProd():
     

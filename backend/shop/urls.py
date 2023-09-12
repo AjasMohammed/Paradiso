@@ -14,5 +14,5 @@ urlpatterns = [
     path('view-favorite', view_favorite, name='view-favorite'),
     path('add-to-favorite/<int:id>', add_to_favorite, name='add-to-favorite'),
     path('remove-from-favorite/<int:id>', remove_from_favorite, name='remove-from-favorite'),
-
+    path('place-order', place_order, name='place-order'),
 ]

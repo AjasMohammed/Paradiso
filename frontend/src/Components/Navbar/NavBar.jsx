@@ -11,7 +11,7 @@ function NavBar(props) {
   const { loadNav } = props;
 
   const [hambtn, setHambtn] = useState(false);
-  const [cartItems, setCartItems] = useState(0);
+  const [cartItemsCount, setCartItemsCount] = useState(0);
   const [loggedOut, setLoggedOut] = useState(false);
 
   const expandMenu = useRef(null);
@@ -48,7 +48,7 @@ function NavBar(props) {
       axios.get("shop/get-cart-items/true").then((response) => {
         let data = response.data;
         const { count } = data;
-        setCartItems(count);
+        setCartItemsCount(count);
       });
     }
   });
@@ -116,10 +116,10 @@ function NavBar(props) {
               </Link>
             </div>
             <div className="cart">
-              {cartItems > 0 ? (
-                <span className="cart-items">{cartItems}</span>
-              ) : null}
               <Link to="/cart/">
+              {cartItemsCount > 0 ? (
+                <span className="cart-items">{cartItemsCount}</span>
+              ) : null}
                 {/* <i className="fa-solid fa-cart-shopping fa-xl"></i> */}
                 <ShoppingCart />
               </Link>

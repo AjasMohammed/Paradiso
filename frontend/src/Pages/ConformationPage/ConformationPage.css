@@ -1,0 +1,26 @@
+.order-form{
+    width: 50%;
+    height: 100vh;
+    padding-block: 2rem;
+    padding-left: 2rem;
+}
+.order-form *{
+    text-align: start;
+}
+.order-items{
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+#conformation{
+    gap: 1rem;
+    margin: 0;
+}
+@media(max-width:880px){
+    .order-form, .order-items{
+        width: 100%;
+    }
+}

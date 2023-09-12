@@ -8,16 +8,18 @@ import ProductView from "./Pages/ProductView/ProductView";
 import Cart from "./Pages/CartItems/Cart";
 import FavoriteItems from "./Pages/FavoriteItems/FavoriteItems";
 import CategoryPage from "./Pages/CategoryPage/CategoryPage";
+import ConformationPage from "./Pages/ConformationPage/ConformationPage";
 
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "./Constants/axios";
 import { useContext, useEffect, useState } from "react";
-import { userContext } from "./Store/Context";
+import { userContext, cartContext } from "./Store/Context";
 
 
 function App() {
-  const { setUser } = useContext(userContext);
+  const { user, setUser } = useContext(userContext);
+  const { cartItems, setCartItems } = useContext(cartContext);
   const [refresh, setrefresh] = useState(false)
 
   useEffect(() => {
@@ -29,12 +31,27 @@ function App() {
   const refreshNavbar = () => {
     setrefresh(!refresh)
   }
-
+useEffect(() => {
+  if(user === true){
+    axios.get("shop/get-cart-items/false").then((response) => {
+      let context = response.data;
+      if (context && "message" in context) {
+        console.log(context.message);
+      } else {
+        const {data} = context
+        console.log(data);
+        setCartItems(data);
+      }
+    });
+  }
+}, []);
 
   return (
     <div className="App">
       <Router>
-      <NavBar loadNav={refreshNavbar} />
+        <NavBar loadNav={refreshNavbar} />
+        <div className="content">
+
         <Routes>
           <Route exact path="/" Component={Home} />
           <Route path="/auth/register" Component={UserAuth} />
@@ -43,8 +60,11 @@ function App() {
           <Route path="/cart/" Component={Cart} />
           <Route path="/favorites/" Component={FavoriteItems} />
           <Route path="/shop/category/:categoryName" Component={CategoryPage} />
+          <Route path="/shop/cart/place-order" Component={ConformationPage} />
         </Routes>
-      <Footer />
+        </div>
+
+        <Footer />
       </Router>
     </div>
   );
