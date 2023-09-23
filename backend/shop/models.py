@@ -89,7 +89,7 @@ class Favorite(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product, through='OrderItem')
+    # products = models.ManyToManyField(Product, through='OrderItem')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     address = models.TextField(max_length=10000)
     city = models.CharField(max_length=1000)

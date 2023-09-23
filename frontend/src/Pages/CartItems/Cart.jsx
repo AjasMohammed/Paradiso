@@ -24,6 +24,7 @@ function Cart() {
   }, []);
   return (
     <>
+    {cartItems.length > 0 ? <>
     <div className="card-items">
       {cartItems &&
         cartItems.map((item) => {
@@ -38,6 +39,10 @@ function Cart() {
       </button>
       </Link>
     </div>
+    </> :
+    <div>
+      <h4>Cart is Empty</h4>
+      </div>}
     </>
   );
 }

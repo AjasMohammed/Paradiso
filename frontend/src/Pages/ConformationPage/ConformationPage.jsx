@@ -15,12 +15,16 @@ function ConformationPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(phone);
-    // console.log(city);
-    // console.log(address);
-    // console.log(zipCode);
+    const prodId = cartItems.map((item)=>{
+      let data = {
+        product: item.id,
+        // quantity: 1
+      }
+      return data
+    })
+    console.log(prodId);
     const data = {
-      products: cartItems,
+      products: prodId,
       phone: phone,
       address: address,
       city: city,

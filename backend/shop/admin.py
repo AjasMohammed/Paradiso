@@ -1,4 +1,8 @@
+from asyncio import format_helpers
+import mimetypes
 from django.contrib import admin
+from django.http import HttpResponse
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from .models import *
 
@@ -47,31 +51,21 @@ class ProductImageAdmin(admin.ModelAdmin):
     image_preview.short_description = 'Image Preview'
 
 
+
+class OrderItemsInline(admin.TabularInline):
+    model = OrderItem
+    extra = 0
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id','user', 'is_paid', 'is_delivered', 'amount']
+    list_display = ['user', 'id', 'is_paid', 'is_delivered', 'amount']
     list_filter = ['is_paid', 'is_delivered']
     # Specify the order of fields
-    fields = ('user', 'display_selected_products', 'amount', 'address', 'phone')
-
-    readonly_fields = ('display_selected_products',)  # Add this line to make the field readonly
-
-    def display_selected_products(self, obj):
-        # Create a string representation of the selected products
-        selected_products = '\n'.join(f"{index+1} - {str(product)}" for index, product in enumerate(obj.products.all()))
-        return selected_products
-
-    display_selected_products.short_description = 'Selected Products'  # Set the field label
+    fields = ('user', 'amount', 'address', 'phone')
 
 
-    # def formfield_for_manytomany(self, db_field, request, **kwargs):
-    #     if db_field.name == "products":
-    #         # Filter products based on the selected order
-    #         order_id = request.resolver_match.kwargs.get('object_id')
-    #         if order_id:
-    #             order = Order.objects.get(pk=order_id)
-    #             kwargs["queryset"] = order.products.all()
-    #     return super().formfield_for_manytomany(db_field, request, **kwargs)
+    inlines = [OrderItemsInline]
 
 
 class CartItemInline(admin.TabularInline):

@@ -2,9 +2,7 @@
 
 #BACKEND
 paradiso/
-backend/**/__pycache__/
-backend/.env
-backend/client_secret.apps.googleusercontent.com.json
+
 
 # FRONTEND
 # dependencies

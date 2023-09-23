@@ -29,22 +29,22 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
         
-    def create(self, validated_data):
-        # Extract the category and tags PKs from the validated data
-        category_pk = validated_data.pop('category', None)
-        tags_pks = validated_data.pop('tags', [])
+    # def create(self, validated_data):
+    #     # Extract the category and tags PKs from the validated data
+    #     category_pk = validated_data.pop('category', None)
+    #     tags_pks = validated_data.pop('tags', [])
 
-        # Assuming you have a method to get an existing category and tags by PK
-        category = Category.objects.get(pk=category_pk) if category_pk else None
-        tags = Tag.objects.filter(pk__in=tags_pks)
+    #     # Assuming you have a method to get an existing category and tags by PK
+    #     category = Category.objects.get(pk=category_pk) if category_pk else None
+    #     tags = Tag.objects.filter(pk__in=tags_pks)
 
-        # Create the product with the modified validated data
-        product = Product.objects.create(category=category, **validated_data)
+    #     # Create the product with the modified validated data
+    #     product = Product.objects.create(category=category, **validated_data)
 
-        # Add the existing tags to the product
-        product.tags.set(tags)
+    #     # Add the existing tags to the product
+    #     product.tags.set(tags)
 
-        return product
+    #     return product
 
 class CartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
@@ -74,7 +74,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class OrderSerializer(serializers.ModelSerializer):
-    products = OrderItemSerializer(many=True)
+    products = OrderItemSerializer(many=True, read_only=True)
     class Meta:
         model = Order
         fields = "__all__"

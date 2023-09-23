@@ -115,6 +115,7 @@ def remove_from_cart(request, id):
     cart = get_object_or_404(Cart, user=request.user)
     cart_item = CartItem.objects.filter(cart=cart, product=product).first()
     cart.products.remove(product)
+    print(cart.update_total())
 
     return Response({'message': 'Removed from Cart'})
 
@@ -209,21 +210,25 @@ def place_order(request):
     data = request.data
     data['user'] = user.pk
 
+    order_items = data.pop('products', [])
+    order_items_ids = [id['product'] for id in order_items]
+    products = Product.objects.filter(id__in = order_items_ids)
+    print(products)
+    
     serializer = OrderSerializer(data=data)
     if serializer.is_valid():
-        serializer.save()
+        order = serializer.save()
+
+        for product in products:
+            print(product)
+            OrderItem.objects.create(order=order, product=product)
     else:
         print(serializer.errors)
-        serializer.save()
+        return Response({'message': 'Something Went Wrong.'}, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({'message': 'Order Placed Successfully.'}, status=status.HTTP_200_OK)
 
 
-# @login_required
-# @api_view('GET')
-# def view_orders(request):
-#     user = request.user
-#     Order = 
 
 def addProd():
     
