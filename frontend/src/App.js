@@ -10,58 +10,65 @@ import FavoriteItems from "./Pages/FavoriteItems/FavoriteItems";
 import CategoryPage from "./Pages/CategoryPage/CategoryPage";
 import ConformationPage from "./Pages/ConformationPage/ConformationPage";
 
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "./Constants/axios";
 import { useContext, useEffect, useState } from "react";
 import { userContext, cartContext } from "./Store/Context";
 
-
 function App() {
   const { user, setUser } = useContext(userContext);
   const { cartItems, setCartItems } = useContext(cartContext);
-  const [refresh, setrefresh] = useState(false)
+  const [refresh, setrefresh] = useState(false);
 
   useEffect(() => {
+    const access_token = localStorage.getItem("access_token");
+    console.log(access_token);
+    if (access_token) {
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${access_token}`;
+    }
     axios.get("auth/check-user/").then((response) => {
       setUser(response.data);
     });
-  },[refresh]);
+  }, [refresh]);
 
   const refreshNavbar = () => {
-    setrefresh(!refresh)
-  }
-useEffect(() => {
-  if(user === true){
-    axios.get("shop/get-cart-items/false").then((response) => {
-      let context = response.data;
-      if (context && "message" in context) {
-        console.log(context.message);
-      } else {
-        const {data} = context
-        console.log(data);
-        setCartItems(data);
-      }
-    });
-  }
-}, []);
+    setrefresh(!refresh);
+  };
+  useEffect(() => {
+    if (user === true) {
+      axios.get("shop/get-cart-items/false").then((response) => {
+        let context = response.data;
+        if (context && "message" in context) {
+          console.log(context.message);
+        } else {
+          const { data } = context;
+          console.log(data);
+          setCartItems(data);
+        }
+      });
+    }
+  }, []);
 
   return (
     <div className="App">
       <Router>
         <NavBar loadNav={refreshNavbar} />
         <div className="content">
-
-        <Routes>
-          <Route exact path="/" Component={Home} />
-          <Route path="/auth/register" Component={UserAuth} />
-          <Route path="/shop" Component={Shop} />
-          <Route path="/shop/product-view/:id" Component={ProductView} />
-          <Route path="/cart/" Component={Cart} />
-          <Route path="/favorites/" Component={FavoriteItems} />
-          <Route path="/shop/category/:categoryName" Component={CategoryPage} />
-          <Route path="/shop/cart/place-order" Component={ConformationPage} />
-        </Routes>
+          <Routes>
+            <Route exact path="/" Component={Home} />
+            <Route path="/auth/register" Component={UserAuth} />
+            <Route path="/shop" Component={Shop} />
+            <Route path="/shop/product-view/:id" Component={ProductView} />
+            <Route path="/cart/" Component={Cart} />
+            <Route path="/favorites/" Component={FavoriteItems} />
+            <Route
+              path="/shop/category/:categoryName"
+              Component={CategoryPage}
+            />
+            <Route path="/shop/cart/place-order" Component={ConformationPage} />
+          </Routes>
         </div>
 
         <Footer />

@@ -1,23 +1,19 @@
-from django.shortcuts import render
 from .models import *
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
-
+from rest_framework.decorators import api_view, permission_classes
 from django.core.files import File
 from io import BytesIO
-
-from math import ceil
 import requests
 import random
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
+from rest_framework.permissions import AllowAny
 
 
 class ProductsView(APIView):
+    permission_classes = [AllowAny]
 
     def get(self, request, format=None):
         products = Product.objects.all().order_by('category__name')
@@ -59,6 +55,7 @@ def category_products(request):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def sample_images(requests):
     images = ProductImage.objects.all()
     if len(images) % 2 == 0:
@@ -78,6 +75,7 @@ def sample_images(requests):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def product_view(request, id):
     product = Product.objects.get(id = id)
     
@@ -95,7 +93,6 @@ def like_product(request, id):
     return Response({'message': 'Liked Product'})
 
 
-@login_required
 @api_view(['POST'])
 def add_to_cart(request, id):
 
@@ -108,7 +105,6 @@ def add_to_cart(request, id):
     return Response({'message': 'Product Added'}, status=status.HTTP_200_OK)
 
 
-@login_required
 @api_view(['POST'])
 def remove_from_cart(request, id):
     product = Product.objects.get(id=id)
@@ -120,7 +116,6 @@ def remove_from_cart(request, id):
     return Response({'message': 'Removed from Cart'})
 
 
-@login_required
 @api_view(['GET'])
 def get_cart_items(request, is_count):
     try:
@@ -137,13 +132,13 @@ def get_cart_items(request, is_count):
                 'data' : serializer.data,
                 'total': cart.total
             }
+            print(context)
         
-        return Response(context)
+        return Response(context, status=status.HTTP_200_OK)
     except :
-        return Response({'message': 'Cart is Empty'})
+        return Response({'message': 'Cart is Empty'}, status=status.HTTP_204_NO_CONTENT)
 
 
-@login_required
 @api_view(['GET'])
 def check_in_cart(request, id):
     try:
@@ -154,7 +149,6 @@ def check_in_cart(request, id):
         return Response(False)
 
 
-@login_required
 @api_view(['GET'])
 def view_favorite(request):
     user = request.user
@@ -179,7 +173,6 @@ def view_favorite(request):
 
 
 
-@login_required
 @api_view(['POST'])
 def add_to_favorite(request, id):
     product = Product.objects.get(id=id)
@@ -189,7 +182,6 @@ def add_to_favorite(request, id):
     return Response({'message': 'Add to Favorite Successfully'}, status=status.HTTP_200_OK)
 
 
-@login_required
 @api_view(['POST'])
 def remove_from_favorite(request, id):
     product = Product.objects.get(id=id)
@@ -203,7 +195,6 @@ def remove_from_favorite(request, id):
 
 
 
-@login_required
 @api_view(['POST'])
 def place_order(request):
     user = request.user

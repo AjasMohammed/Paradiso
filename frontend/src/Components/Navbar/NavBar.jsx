@@ -58,9 +58,11 @@ function NavBar(props) {
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
     axios.post("auth/logout/").then((response) => {
       console.log(response.data);
+      localStorage.removeItem('access_token')
+      axios.defaults.headers.common['Authorization'] = null
       setLoggedOut(!loggedOut);
-      loadNav()
-      window.location.href = '/'
+      loadNav();
+      window.location.href = "/";
     });
   };
 
@@ -117,9 +119,9 @@ function NavBar(props) {
             </div>
             <div className="cart">
               <Link to="/cart/">
-              {cartItemsCount > 0 ? (
-                <span className="cart-items">{cartItemsCount}</span>
-              ) : null}
+                {cartItemsCount > 0 ? (
+                  <span className="cart-items">{cartItemsCount}</span>
+                ) : null}
                 {/* <i className="fa-solid fa-cart-shopping fa-xl"></i> */}
                 <ShoppingCart />
               </Link>

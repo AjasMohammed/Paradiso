@@ -1,69 +1,83 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import UserSerializer, LogInSerializer
-from django.contrib.auth import logout, authenticate, login
-from rest_framework.decorators import api_view
-
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.utils.decorators import method_decorator 
-
-
+from django.utils.decorators import method_decorator
 
 
 class RegisterUser(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = UserSerializer(data=request.data)
 
         if serializer.is_valid():
-            print('Saved')
             serializer.save()
-            
+
             return Response({'message': 'Registration Successful'}, status=status.HTTP_201_CREATED)
-        print('Not Saved')
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginUser(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = LogInSerializer(data=request.data)
+        context = {}
         if serializer.is_valid():
-            username = serializer.validated_data['username']
-            password = serializer.validated_data['password']
+            context['data'] = serializer.validated_data
+            data = serializer.validated_data
+            context['access_token'] = data['access']
+            response = Response(context, status=status.HTTP_200_OK)
+            response.set_cookie(
+                key='refresh_token',
+                value=data['refresh'],
+                httponly=True,
+                secure=False
+            )
+            # response.set_cookie(
+            #     key='access_token',
+            #     value=data['access'],
+            #     httponly=True,
+            #     secure=False
+            # )
+            return response
+        context['message'] = serializer.errors
+        return Response(context, status=status.HTTP_400_BAD_REQUEST)
 
-            user = authenticate(username=username, password=password)
 
-            if user is not None:
-                login(request, user)
-                return Response({'message': 'LoggedIn Successufully'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'message': "User Dosen't Exists"}, status=status.HTTP_404_NOT_FOUND)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class LogOutUser(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request):
+        refresh_token = request.COOKIES.get('refresh_token')
+        print(request.COOKIES)
+        if not refresh_token:
+            return Response({"message": "refresh token is missing!"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            response = Response({'message': "Successfully LoggedOut!"}, status=status.HTTP_200_OK)
+            response.delete_cookie('refresh_token')
+            return response
+        except:
+            return Response({"message": "token is invalid!"}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def check_user_is_authenticated(request):
     authenticated = request.user.is_authenticated
-
     return Response(authenticated, status=status.HTTP_200_OK)
-
-
-@api_view(['POST'])
-def logout_user(request):
-    logout(request)
-    return Response({'message': 'User Logged Out Successfully'}, status=status.HTTP_200_OK)
-    # return redirect(reverse('home:home'))
-
-
-
-
-
-
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')

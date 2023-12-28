@@ -1,5 +1,8 @@
 from django.db import models
 from authentication.models import CustomUser
+from PIL import Image
+from io import BytesIO
+from django.core.files import File
 
 
 class Category(models.Model):
@@ -44,8 +47,23 @@ class ProductImage(models.Model):
         return path
 
     image = models.ImageField(upload_to=dirName, max_length=500)
+    thumbnail = models.ImageField(
+        upload_to='products/thumbnails', null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
+        if not self.thumbnail:
+            img = Image.open(self.image)
+            output_size = (100, 100)
+            img.thumbnail(output_size)
+
+            thumb_io = BytesIO()
+            img.save(thumb_io, format='JPEG', quality=85)
+            thumb_io.seek(0)
+
+            self.thumbnail.save(self.image.name, File(thumb_io), save=False)
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Image of {self.product.name}"
@@ -57,13 +75,14 @@ class Cart(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def update_total(self):
-        total = self.cartitem_set.aggregate(total=models.Sum(models.F('product__price') * models.F('quantity')))['total']
+        total = self.cartitem_set.aggregate(total=models.Sum(
+            models.F('product__price') * models.F('quantity')))['total']
         self.total = total if total is not None else 0
         self.save()
 
     def __str__(self):
         return f'Cart for {self.user.username}'
-        
+
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)

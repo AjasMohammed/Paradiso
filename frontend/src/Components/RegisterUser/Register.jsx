@@ -1,22 +1,20 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import "./Register.css";
 import axios from "../../Constants/axios";
 import { Navigate } from "react-router-dom";
+import { authContext } from "../../Store/Context";
 
 function Register() {
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [authentication, setAuthentication] = useState(false);
+  const { setAuth } = useContext(authContext);
 
   const passwordRef = useRef();
 
-  const nameInput = (e) => {
-    setUsername(e.target.value);
-  };
   const emailInput = (e) => {
     setEmail(e.target.value);
   };
@@ -42,37 +40,38 @@ function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
-      username: username,
       email: email,
       password: password,
     };
     axios.defaults.xsrfCookieName = "csrftoken";
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
-    axios
-      .post("auth/register/", userData)
-      .then((response) => {
-        console.log(response.data);
-        setAuthentication(true)
-      });
+    axios.post("auth/register/", userData).then((response) => {
+      console.log(response.data);
+      setAuthentication(true);
+      setAuth('login')
+    });
   };
 
   return (
     <div className="auth-container">
       <h1 className="title">Sign Up</h1>
       <form action="" className="register-form" onSubmit={handleSubmit}>
-        <label className="inp-label" htmlFor="">User Name</label>
-        <input className="register-inp" type="text" onChange={nameInput} />
-
-        <label className="inp-label" htmlFor="">Email</label>
+        <label className="inp-label" htmlFor="">
+          Email
+        </label>
         <input className="register-inp" type="email" onChange={emailInput} />
 
-        <label className="inp-label" htmlFor="">Password</label>
+        <label className="inp-label" htmlFor="">
+          Password
+        </label>
         <input
           className="register-inp"
           type="password"
           onChange={passwordInput}
         />
-        <label className="inp-label" htmlFor="">Password(again)</label>
+        <label className="inp-label" htmlFor="">
+          Password(again)
+        </label>
         <input
           ref={passwordRef}
           className="register-inp"
@@ -88,7 +87,7 @@ function Register() {
           Register
         </button>
       </form>
-      {authentication && <Navigate to="/" />}
+      {authentication && <Navigate to="/login" />}
     </div>
   );
 }
