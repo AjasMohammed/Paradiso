@@ -1,7 +1,15 @@
-.place-order{
-    margin: 1rem;
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    align-items: center;
+.place-order {
+  margin: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.cart-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 8rem;
 }

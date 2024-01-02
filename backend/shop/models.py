@@ -79,6 +79,7 @@ class Cart(models.Model):
             models.F('product__price') * models.F('quantity')))['total']
         self.total = total if total is not None else 0
         self.save()
+        return self.total
 
     def __str__(self):
         return f'Cart for {self.user.username}'

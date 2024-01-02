@@ -26,38 +26,36 @@
   text-decoration: none;
 }
 
-@media(max-width:1400px){
-  .prod-link{
+@media (max-width: 1400px) {
+  .prod-link {
     font-size: 15px;
   }
-
 }
-@media(max-width:1100px){
-  .prod-link{
+@media (max-width: 1100px) {
+  .prod-link {
     font-size: 14px;
   }
-
 }
-@media(max-width:880px){
-  .prod-link{
+@media (max-width: 880px) {
+  .prod-link {
     font-size: 13px;
   }
-  .prod-name{
+  .prod-name {
     font-size: 120%;
   }
 }
-@media(max-width:720px){
-  .prod-link{
+@media (max-width: 720px) {
+  .prod-link {
     font-size: 11px;
   }
 }
-@media(max-width:580px){
-  .prod-link{
+@media (max-width: 580px) {
+  .prod-link {
     font-size: 10px;
   }
 }
-@media(max-width:380px){
-  .card-body{
+@media (max-width: 380px) {
+  .card-body {
     padding: 5px;
   }
 }

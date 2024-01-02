@@ -1,10 +1,12 @@
 import { createContext, useEffect, useState } from "react";
-import axios from '../Constants/axios'
+import axios from "../Constants/axios";
 
 export const userContext = createContext(null);
 
 function CheckUser({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(
+    localStorage.getItem("userStatus") === "true" ? true : false
+  );
   return (
     <userContext.Provider value={{ user, setUser }}>
       {children}
@@ -26,9 +28,11 @@ export const cartContext = createContext(null);
 function CartItems({ children }) {
   const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
-  
+
   return (
-    <cartContext.Provider value={{ cartItems, setCartItems, totalAmount, setTotalAmount }}>
+    <cartContext.Provider
+      value={{ cartItems, setCartItems, totalAmount, setTotalAmount }}
+    >
       {children}
     </cartContext.Provider>
   );

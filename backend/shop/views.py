@@ -40,7 +40,7 @@ class ProductsView(APIView):
         #     if category not in products_dict.keys():
         #         products_dict[category] = []
         #     products_dict[category].append(product_row)
-              
+
         return Response(ordered_products, status=status.HTTP_200_OK)
 
 
@@ -77,8 +77,8 @@ def sample_images(requests):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def product_view(request, id):
-    product = Product.objects.get(id = id)
-    
+    product = Product.objects.get(id=id)
+
     serializer = ProductSerializer(product)
 
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -86,7 +86,7 @@ def product_view(request, id):
 
 @api_view(['POST'])
 def like_product(request, id):
-    product = Product.objects.get(id = id)
+    product = Product.objects.get(id=id)
     product.likes += 1
     product.save()
 
@@ -98,7 +98,8 @@ def add_to_cart(request, id):
 
     product = get_object_or_404(Product, pk=id)
     cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart, product=product)
     # cart_item.quantity += 1
     cart_item.save()
 
@@ -119,23 +120,23 @@ def remove_from_cart(request, id):
 @api_view(['GET'])
 def get_cart_items(request, is_count):
     try:
-        cart  = Cart.objects.prefetch_related('cartitem_set').get(user=request.user)
-        
+        cart = Cart.objects.prefetch_related(
+            'cartitem_set').get(user=request.user)
+
         items = cart.cartitem_set.all()
         if is_count == 'true':
             item_no = items.count()
-            return Response({'count':item_no})
+            return Response({'count': item_no})
         elif is_count == 'false':
             serializer = CartItemSerializer(items, many=True)
 
             context = {
-                'data' : serializer.data,
+                'data': serializer.data,
                 'total': cart.total
             }
-            print(context)
-        
+
         return Response(context, status=status.HTTP_200_OK)
-    except :
+    except:
         return Response({'message': 'Cart is Empty'}, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -143,7 +144,7 @@ def get_cart_items(request, is_count):
 def check_in_cart(request, id):
     try:
         cart = get_object_or_404(Cart, user=request.user)
-        cart_items = get_object_or_404(CartItem, cart=cart, product_id = id)
+        cart_items = get_object_or_404(CartItem, cart=cart, product_id=id)
         return Response(True)
     except:
         return Response(False)
@@ -172,7 +173,6 @@ def view_favorite(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
 @api_view(['POST'])
 def add_to_favorite(request, id):
     product = Product.objects.get(id=id)
@@ -194,7 +194,6 @@ def remove_from_favorite(request, id):
     return Response({'message': 'Removed from Favorite Successfully'}, status=status.HTTP_200_OK)
 
 
-
 @api_view(['POST'])
 def place_order(request):
     user = request.user
@@ -203,9 +202,9 @@ def place_order(request):
 
     order_items = data.pop('products', [])
     order_items_ids = [id['product'] for id in order_items]
-    products = Product.objects.filter(id__in = order_items_ids)
+    products = Product.objects.filter(id__in=order_items_ids)
     print(products)
-    
+
     serializer = OrderSerializer(data=data)
     if serializer.is_valid():
         order = serializer.save()
@@ -220,9 +219,8 @@ def place_order(request):
     return Response({'message': 'Order Placed Successfully.'}, status=status.HTTP_200_OK)
 
 
-
 def addProd():
-    
+
     url = "https://fakestoreapi.com/products"
 
     response = requests.get(url)
@@ -240,14 +238,13 @@ def addProd():
         tags = category.split(' ')
 
         category, _ = Category.objects.get_or_create(name=category)
-        prod = Product(name=title, price=price, category=category, description=description, likes=likes)
+        prod = Product(name=title, price=price, category=category,
+                       description=description, likes=likes)
         prod.save()
 
         for tag in tags:
             tag, _ = Tag.objects.get_or_create(name=tag)
             prod.tags.add(tag)
-        
-
 
         # Fetch the image from the URL and save it to the media folder
         img_content = requests.get(image_url).content
@@ -255,6 +252,5 @@ def addProd():
         img_bytes_io = BytesIO(img_content)
         prod_image = ProductImage(product=prod)
         prod_image.image.save(f"{id}.jpg", File(img_bytes_io))
-
 
         print(f'Produt: {id} added......')

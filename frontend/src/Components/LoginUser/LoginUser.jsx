@@ -17,7 +17,6 @@ function Register() {
   };
 
   const handleSubmit = (e) => {
-    console.log("logging");
     e.preventDefault();
     const userData = {
       email: email,

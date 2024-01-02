@@ -19,18 +19,17 @@ function Home() {
   useEffect(() => {
     axios.get("shop/sample-images").then((response) => {
       const data = response.data;
-       setImageArr(data);
-    })
-     
+      setImageArr(data);
+    });
   }, []);
- 
+
   useEffect(() => {
-    let intervalId
-     if (imageArr.length > 0) {
-         intervalId = setInterval(swapPair, 10000);
-      } 
-      return () => clearInterval(intervalId)   
-  }, [imageArr])
+    let intervalId;
+    if (imageArr.length > 0) {
+      intervalId = setInterval(swapPair, 10000);
+    }
+    return () => clearInterval(intervalId);
+  }, [imageArr]);
 
   return (
     <div id="home">

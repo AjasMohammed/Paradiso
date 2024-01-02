@@ -8,7 +8,9 @@ import { BASE_URL } from "../../Constants/config";
 import { Heart } from "lucide-react";
 import { authContext, userContext } from "../../Store/Context";
 
-function ProductView() {
+function ProductView(props) {
+  const { loadNav } = props;
+
   const param = useParams();
   const { user } = useContext(userContext);
   const { setAuth } = useContext(authContext);
@@ -24,7 +26,6 @@ function ProductView() {
   });
 
   useEffect(() => {
-    console.log(user);
     axios.defaults.xsrfCookieName = "csrftoken";
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
     axios.get(`shop/product/${param.id}`).then((response) => {
@@ -34,8 +35,6 @@ function ProductView() {
     });
 
     if (user !== false && user !== null) {
-      console.log(user);
-
       axios.get(`shop/check-in-cart/${param.id}`).then((response) => {
         setInCart(response.data);
       });
@@ -44,13 +43,13 @@ function ProductView() {
         setIsFavorite(response.data);
       });
     }
-  }, []);
+  }, [inCart, isFavorite]);
 
   const addToCart = () => {
     if (user === true && user !== null) {
       axios.post(`shop/add-to-cart/${param.id}`).then((response) => {
-        console.log(response.statusText);
         setInCart(true);
+        loadNav();
       });
     } else {
       setAuth("login");
@@ -61,29 +60,30 @@ function ProductView() {
     axios.post(`shop/remove-from-cart/${param.id}`).then((response) => {
       console.log(response.data);
       setInCart(false);
+      loadNav();
     });
   };
 
   useEffect(() => {
     if (user === true) {
       addToFavorite();
-    }else{
-      setIsFavorite(false)
+    } else {
+      setIsFavorite(false);
     }
   }, [isFavorite]);
 
   const addToFavorite = () => {
-      if (isFavorite === true) {
-        axios
-          .post(`shop/add-to-favorite/${param.id}`)
+    if (isFavorite === true) {
+      axios
+        .post(`shop/add-to-favorite/${param.id}`)
 
-          .then((response) => console.log(response.data));
-      } else if (isFavorite === false) {
-        axios
-          .post(`shop/remove-from-favorite/${param.id}`)
+        .then((response) => console.log(response.data));
+    } else if (isFavorite === false) {
+      axios
+        .post(`shop/remove-from-favorite/${param.id}`)
 
-          .then((response) => console.log(response.data));
-      }
+        .then((response) => console.log(response.data));
+    }
   };
 
   return (

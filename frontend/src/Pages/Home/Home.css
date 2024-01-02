@@ -5,6 +5,9 @@
 .App:has(> #home) footer {
   margin-top: 0;
 }
+#home {
+  overflow-x: hidden;
+}
 .bg-image {
   background-image: url("../../../public/assets/images/bg-primery.jpg");
   background-size: cover;
@@ -47,31 +50,31 @@ h1.intro {
   justify-content: center;
 }
 
-@media(max-width:1260px){
-  .sample-products{
+@media (max-width: 1260px) {
+  .sample-products {
     right: 5%;
     transition: all 200ms ease-in-out;
   }
 }
-@media(max-width:1100px){
-  .bg-image{
+@media (max-width: 1100px) {
+  .bg-image {
     justify-content: start;
   }
-  .sample-products{
+  .sample-products {
     width: 100%;
   }
 }
 
-@media(max-width:880px){
-    .bg-image{
+@media (max-width: 880px) {
+  .bg-image {
     justify-content: center;
   }
 
-  .sample-products{
+  .sample-products {
     position: static;
-    margin-top: 6rem
+    margin-top: 6rem;
   }
   h1.intro {
-  font-size: 3em;
-}
+    font-size: 3em;
+  }
 }

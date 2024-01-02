@@ -58,8 +58,8 @@ function NavBar(props) {
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
     axios.post("auth/logout/").then((response) => {
       console.log(response.data);
-      localStorage.removeItem('access_token')
-      axios.defaults.headers.common['Authorization'] = null
+      localStorage.removeItem("access_token");
+      axios.defaults.headers.common["Authorization"] = null;
       setLoggedOut(!loggedOut);
       loadNav();
       window.location.href = "/";

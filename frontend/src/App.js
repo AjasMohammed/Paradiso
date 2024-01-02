@@ -22,14 +22,12 @@ function App() {
 
   useEffect(() => {
     const access_token = localStorage.getItem("access_token");
-    console.log(access_token);
     if (access_token) {
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${access_token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
     }
     axios.get("auth/check-user/").then((response) => {
       setUser(response.data);
+      localStorage.setItem("userStatus", JSON.stringify(response.data));
     });
   }, [refresh]);
 
@@ -44,7 +42,6 @@ function App() {
           console.log(context.message);
         } else {
           const { data } = context;
-          console.log(data);
           setCartItems(data);
         }
       });
@@ -60,7 +57,10 @@ function App() {
             <Route exact path="/" Component={Home} />
             <Route path="/auth/register" Component={UserAuth} />
             <Route path="/shop" Component={Shop} />
-            <Route path="/shop/product-view/:id" Component={ProductView} />
+            <Route
+              path="/shop/product-view/:id"
+              element={<ProductView loadNav={refreshNavbar} />}
+            />
             <Route path="/cart/" Component={Cart} />
             <Route path="/favorites/" Component={FavoriteItems} />
             <Route
