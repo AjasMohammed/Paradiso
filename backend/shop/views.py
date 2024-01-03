@@ -3,7 +3,7 @@ from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from django.core.files import File
 from io import BytesIO
 import requests
@@ -13,6 +13,7 @@ from rest_framework.permissions import AllowAny
 
 
 class ProductsView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def get(self, request, format=None):
@@ -26,20 +27,6 @@ class ProductsView(APIView):
             if category_name not in ordered_products.keys():
                 ordered_products[category_name] = []
             ordered_products[category_name].append(item)
-
-        # products_dict = {}
-        # for category, items in ordered_products.items():
-        #     rows = ceil(len(items)/5)
-        #     n = 0
-        #     product_row = []
-
-        #     for i in range(rows):
-        #         prod = items[n:n+5]
-        #         n += 5
-        #         product_row.append(prod)
-        #     if category not in products_dict.keys():
-        #         products_dict[category] = []
-        #     products_dict[category].append(product_row)
 
         return Response(ordered_products, status=status.HTTP_200_OK)
 
@@ -55,6 +42,7 @@ def category_products(request):
 
 
 @api_view(['GET'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def sample_images(requests):
     images = ProductImage.objects.all()
@@ -62,12 +50,9 @@ def sample_images(requests):
         n = len(images)//2
     else:
         n = (len(images)+1) // 2
-
     random_images = random.choices(images, k=n)
     serializer = ProductImageSerializer(random_images, many=True)
-
     data = []
-
     for i in range(0, len(serializer.data), 2):
         data.append([serializer.data[i], serializer.data[i+1]])
 
@@ -75,12 +60,11 @@ def sample_images(requests):
 
 
 @api_view(['GET'])
+@authentication_classes([])
 @permission_classes([AllowAny])
 def product_view(request, id):
     product = Product.objects.get(id=id)
-
     serializer = ProductSerializer(product)
-
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -158,7 +142,6 @@ def view_favorite(request):
     except Exception as e:
         return Response(False)
     prod_id = request.query_params.get('id')
-    print(prod_id)
 
     if prod_id:
         try:
@@ -167,7 +150,6 @@ def view_favorite(request):
             return Response(True)
         except Exception as e:
             return Response(False)
-
     else:
         serializer = FavoriteSerializer(favorite)
         return Response(serializer.data, status=status.HTTP_200_OK)

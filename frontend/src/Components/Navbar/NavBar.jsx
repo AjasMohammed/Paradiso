@@ -18,7 +18,7 @@ function NavBar(props) {
   const expandMid = useRef(null);
   const hamBtn = useRef(null);
 
-  const { user } = useContext(userContext);
+  const { user, setUser } = useContext(userContext);
   const { setAuth } = useContext(authContext);
 
   const expand = () => {
@@ -56,14 +56,29 @@ function NavBar(props) {
   const logOut = () => {
     axios.defaults.xsrfCookieName = "csrftoken";
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
-    axios.post("auth/logout/").then((response) => {
-      console.log(response.data);
-      localStorage.removeItem("access_token");
-      axios.defaults.headers.common["Authorization"] = null;
-      setLoggedOut(!loggedOut);
-      loadNav();
-      window.location.href = "/";
-    });
+    axios
+      .post("auth/logout/")
+      .then((response) => {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("userStatus");
+        axios.defaults.headers.common["Authorization"] = null;
+        setLoggedOut(!loggedOut);
+        setUser(false);
+        loadNav();
+        window.location.href = "/";
+      })
+      .catch((e) => {
+        if (e.response.status == 400) {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("userStatus");
+          setLoggedOut(!loggedOut);
+          setUser(false);
+          loadNav();
+          window.location.href = "/";
+        } else {
+          alert("Somthing went wrong!");
+        }
+      });
   };
 
   return (
