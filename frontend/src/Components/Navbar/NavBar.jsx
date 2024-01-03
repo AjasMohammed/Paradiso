@@ -54,13 +54,13 @@ function NavBar(props) {
   });
 
   const logOut = () => {
+    localStorage.removeItem("userStatus");
     axios.defaults.xsrfCookieName = "csrftoken";
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
     axios
       .post("auth/logout/")
       .then((response) => {
         localStorage.removeItem("access_token");
-        localStorage.removeItem("userStatus");
         axios.defaults.headers.common["Authorization"] = null;
         setLoggedOut(!loggedOut);
         setUser(false);

@@ -27,7 +27,7 @@ class RegisterUser(APIView):
 
 
 class LoginUser(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -71,10 +71,12 @@ class LogOutUser(APIView):
 
 
 @api_view(['GET'])
-@authentication_classes([])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def check_user_is_authenticated(request):
+    print(request.user)
     authenticated = request.user.is_authenticated
+    print(authenticated)
     return Response(authenticated, status=status.HTTP_200_OK)
 
 

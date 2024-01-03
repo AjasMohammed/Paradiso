@@ -27,7 +27,7 @@ function App() {
     }
     axios.get("auth/check-user/").then((response) => {
       setUser(response.data);
-      localStorage.setItem("userStatus", JSON.stringify(response.data));
+      // localStorage.setItem("userStatus", JSON.stringify(response.data));
     });
   }, [refresh]);
 

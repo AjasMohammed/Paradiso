@@ -9,7 +9,7 @@ from io import BytesIO
 import requests
 import random
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
 class ProductsView(APIView):
@@ -69,6 +69,7 @@ def product_view(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def like_product(request, id):
     product = Product.objects.get(id=id)
     product.likes += 1
@@ -78,8 +79,8 @@ def like_product(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def add_to_cart(request, id):
-
     product = get_object_or_404(Product, pk=id)
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_item, created = CartItem.objects.get_or_create(
@@ -91,6 +92,7 @@ def add_to_cart(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def remove_from_cart(request, id):
     product = Product.objects.get(id=id)
     cart = get_object_or_404(Cart, user=request.user)
@@ -102,6 +104,7 @@ def remove_from_cart(request, id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_cart_items(request, is_count):
     try:
         cart = Cart.objects.prefetch_related(
@@ -125,6 +128,7 @@ def get_cart_items(request, is_count):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def check_in_cart(request, id):
     try:
         cart = get_object_or_404(Cart, user=request.user)
@@ -135,6 +139,7 @@ def check_in_cart(request, id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def view_favorite(request):
     user = request.user
     try:
@@ -156,6 +161,7 @@ def view_favorite(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def add_to_favorite(request, id):
     product = Product.objects.get(id=id)
     favorite, created = Favorite.objects.get_or_create(user=request.user)
@@ -165,6 +171,7 @@ def add_to_favorite(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def remove_from_favorite(request, id):
     product = Product.objects.get(id=id)
     try:
@@ -177,6 +184,7 @@ def remove_from_favorite(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def place_order(request):
     user = request.user
     data = request.data
@@ -185,7 +193,6 @@ def place_order(request):
     order_items = data.pop('products', [])
     order_items_ids = [id['product'] for id in order_items]
     products = Product.objects.filter(id__in=order_items_ids)
-    print(products)
 
     serializer = OrderSerializer(data=data)
     if serializer.is_valid():
@@ -195,8 +202,7 @@ def place_order(request):
             print(product)
             OrderItem.objects.create(order=order, product=product)
     else:
-        print(serializer.errors)
-        return Response({'message': 'Something Went Wrong.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({'message': 'Order Placed Successfully.'}, status=status.HTTP_200_OK)
 
