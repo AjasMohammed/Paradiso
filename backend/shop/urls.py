@@ -17,4 +17,5 @@ urlpatterns = [
     path('remove-from-favorite/<int:id>',
          remove_from_favorite, name='remove-from-favorite'),
     path('place-order', place_order, name='place-order'),
+    path('search-query', SearchQuery.as_view(), name='search-query'),
 ]

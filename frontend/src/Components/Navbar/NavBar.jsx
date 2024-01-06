@@ -13,6 +13,7 @@ function NavBar(props) {
   const [hambtn, setHambtn] = useState(false);
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [loggedOut, setLoggedOut] = useState(false);
+  const [query, setQuery] = useState("");
 
   const expandMenu = useRef(null);
   const expandMid = useRef(null);
@@ -81,6 +82,25 @@ function NavBar(props) {
       });
   };
 
+  const handleQuery = (e) => {
+    setQuery(e.target.value);
+    console.log(query);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    axios
+      .get(`shop/search-query?query=${query}`)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((e) => {
+        if (e.response.status == 404) {
+        console.log('No data');
+        }
+      });
+  };
+
   return (
     <>
       <nav>
@@ -116,8 +136,13 @@ function NavBar(props) {
                 type="text"
                 className="inp-field"
                 placeholder="Search Products"
+                onChange={handleQuery}
               />
-              <button className="search-btn" type="submit">
+              <button
+                className="search-btn"
+                type="submit"
+                onClick={handleSearch}
+              >
                 SEARCH
               </button>
             </form>

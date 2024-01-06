@@ -10,6 +10,7 @@ import requests
 import random
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.db.models import Q
 
 
 class ProductsView(APIView):
@@ -32,6 +33,8 @@ class ProductsView(APIView):
 
 
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def category_products(request):
     name = request.query_params.get('category')
     category = Category.objects.get(name=name)
@@ -205,6 +208,26 @@ def place_order(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({'message': 'Order Placed Successfully.'}, status=status.HTTP_200_OK)
+
+
+class SearchQuery(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        keyword = request.query_params.get('query')
+        print('name', Product.objects.filter(name__icontains=keyword))
+        print('catagory', Product.objects.filter(
+            category__name__icontains=keyword))
+        print('tags', Product.objects.filter(tags__name__icontains=keyword))
+        results = Product.objects.filter(Q(name__icontains=keyword) | Q(
+            category__name__icontains=keyword) | Q(tags__name__icontains=keyword))
+        print(results)
+        if results:
+            serializer = ProductSerializer(results, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Not Found!'}, status=status.HTTP_404_NOT_FOUND)
 
 
 def addProd():
