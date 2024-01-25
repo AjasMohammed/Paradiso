@@ -72,8 +72,9 @@ class LogOutUser(APIView):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-@authentication_classes([])
+@authentication_classes([JWTAuthentication])
 def check_user_is_authenticated(request):
+    print(request.headers)
     print(request.user)
     authenticated = request.user.is_authenticated
     print(authenticated)

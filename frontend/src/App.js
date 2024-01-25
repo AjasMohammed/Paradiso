@@ -9,11 +9,12 @@ import Cart from "./Pages/CartItems/Cart";
 import FavoriteItems from "./Pages/FavoriteItems/FavoriteItems";
 import CategoryPage from "./Pages/CategoryPage/CategoryPage";
 import ConformationPage from "./Pages/ConformationPage/ConformationPage";
+import axios from "./Constants/axios";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import axios from "./Constants/axios";
 import { useContext, useEffect, useState } from "react";
 import { userContext, cartContext } from "./Store/Context";
+
 
 function App() {
   const { user, setUser } = useContext(userContext);
@@ -22,11 +23,13 @@ function App() {
 
   useEffect(() => {
     const access_token = localStorage.getItem("access_token");
+    console.log(access_token);
     if (access_token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
     }
     axios.get("auth/check-user/").then((response) => {
       setUser(response.data);
+      console.log(response.data);
       // localStorage.setItem("userStatus", JSON.stringify(response.data));
     });
   }, [refresh]);
@@ -73,6 +76,7 @@ function App() {
 
         <Footer />
       </Router>
+
     </div>
   );
 }

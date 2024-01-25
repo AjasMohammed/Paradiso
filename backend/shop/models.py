@@ -8,12 +8,17 @@ from django.core.files import File
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
+    class Meta:
+        app_label = 'shop'
+
     def __str__(self):
         return self.name
 
 
 class Tag(models.Model):
     name = models.CharField(max_length=10, unique=True)
+    class Meta:
+        app_label = 'shop'
 
     def __str__(self):
         return self.name
@@ -33,6 +38,7 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['id']
+        app_label = 'shop'
 
     def __str__(self):
         return self.name
@@ -65,6 +71,9 @@ class ProductImage(models.Model):
             self.thumbnail.save(self.image.name, File(thumb_io), save=False)
             super().save(*args, **kwargs)
 
+    class Meta:
+        app_label = 'shop'
+
     def __str__(self):
         return f"Image of {self.product.name}"
 
@@ -80,6 +89,9 @@ class Cart(models.Model):
         self.total = total if total is not None else 0
         self.save()
         return self.total
+    
+    class Meta:
+        app_label = 'shop'
 
     def __str__(self):
         return f'Cart for {self.user.username}'
@@ -94,6 +106,9 @@ class CartItem(models.Model):
         super().save(*args, **kwargs)
         # Update the total price of the cart whenever a CartItem is saved
         self.cart.update_total()
+    
+    class Meta:
+        app_label = 'shop'
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name} in {self.cart.user.username}'s cart"
@@ -102,6 +117,9 @@ class CartItem(models.Model):
 class Favorite(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product)
+
+    class Meta:
+        app_label = 'shop'
 
     def __str__(self):
         return f"{self.user.username}'s Favorite"
@@ -118,6 +136,9 @@ class Order(models.Model):
     is_paid = models.BooleanField(default=False)
     is_delivered = models.BooleanField(default=False)
 
+    class Meta:
+        app_label = 'shop'
+
     def __str__(self):
         return f"{self.user}-{self.pk}"
 
@@ -126,5 +147,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
+    class Meta:
+        app_label = 'shop'
     def __str__(self):
         return f"{self.pk}-{self.order.pk}"

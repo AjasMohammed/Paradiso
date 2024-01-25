@@ -11,6 +11,8 @@ import random
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db.models import Q
+from decouple import config
+import stripe
 
 
 class ProductsView(APIView):
@@ -229,6 +231,15 @@ class SearchQuery(APIView):
         else:
             return Response({'message': 'Not Found!'}, status=status.HTTP_404_NOT_FOUND)
 
+
+@api_view(['POST'])
+def payment(request):
+    stripe.api_key = config('STRIPE_KEY')
+    test_payment_intent = stripe.PaymentIntent.create(
+        amount=1000, currency='inr',
+        payment_method_types=['card'],
+        receipt_email='test@example.com')
+    return Response(data= test_payment_intent, status=status.HTTP_200_OK)
 
 def addProd():
 

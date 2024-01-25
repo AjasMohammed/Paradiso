@@ -6,6 +6,7 @@ import axios from "../../Constants/axios";
 
 import { ShoppingCart, UserCircle, Heart } from "lucide-react";
 import { Tooltip } from "react-tooltip";
+import SearchField from "./SearchField/SearchField";
 
 function NavBar(props) {
   const { loadNav } = props;
@@ -13,7 +14,6 @@ function NavBar(props) {
   const [hambtn, setHambtn] = useState(false);
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [loggedOut, setLoggedOut] = useState(false);
-  const [query, setQuery] = useState("");
 
   const expandMenu = useRef(null);
   const expandMid = useRef(null);
@@ -45,6 +45,7 @@ function NavBar(props) {
   };
 
   useEffect(() => {
+    console.log(user);
     if (user == true) {
       axios.get("shop/get-cart-items/true").then((response) => {
         let data = response.data;
@@ -82,24 +83,7 @@ function NavBar(props) {
       });
   };
 
-  const handleQuery = (e) => {
-    setQuery(e.target.value);
-    console.log(query);
-  };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    axios
-      .get(`shop/search-query?query=${query}`)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((e) => {
-        if (e.response.status == 404) {
-        console.log('No data');
-        }
-      });
-  };
 
   return (
     <>
@@ -131,21 +115,7 @@ function NavBar(props) {
           </div>
 
           <div className="form-area">
-            <form action="" className="search-field">
-              <input
-                type="text"
-                className="inp-field"
-                placeholder="Search Products"
-                onChange={handleQuery}
-              />
-              <button
-                className="search-btn"
-                type="submit"
-                onClick={handleSearch}
-              >
-                SEARCH
-              </button>
-            </form>
+            <SearchField/>
           </div>
         </div>
 
