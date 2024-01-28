@@ -8,12 +8,6 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = '__all__'
-
-
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
@@ -21,7 +15,6 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
-    tags = TagSerializer(many=True)
     productimage_set = ProductImageSerializer(many=True, read_only=True)
     
     class Meta:

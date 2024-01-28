@@ -15,7 +15,7 @@ class ProductImageInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'price')
-    list_filter = ('category', 'tags')
+    list_filter = ('category', 'brand')
     inlines = [ProductImageInline]
 
 
@@ -43,13 +43,10 @@ class ProductImageAdmin(admin.ModelAdmin):
         return response
     view_image.short_description = 'View Image'
 
-
-
     def image_preview(self, obj):
         return mark_safe(f'<img src="{obj.image.url}" alt="Image" style="max-height: 100px; max-width: 100px;" />')
 
     image_preview.short_description = 'Image Preview'
-
 
 
 class OrderItemsInline(admin.TabularInline):
@@ -80,7 +77,9 @@ class CartAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Category)
-admin.site.register(Tag)
+admin.site.register(SubCategory)
 admin.site.register(CartItem)
 admin.site.register(Favorite)
 admin.site.register(OrderItem)
+admin.site.register(Brand)
+admin.site.register(Variation)
