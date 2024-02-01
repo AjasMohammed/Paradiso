@@ -2,7 +2,7 @@
   height: 20rem;
   max-width: 20rem;
   object-fit: contain;
-  mix-blend-mode: multiply;
+  mix-blend-mode: darken;
 }
 
 .on-top {

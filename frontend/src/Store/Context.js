@@ -5,7 +5,8 @@ export const userContext = createContext(null);
 
 function CheckUser({ children }) {
   const [user, setUser] = useState(
-    localStorage.getItem("userStatus") === "true" ? true : false
+    localStorage.getItem("access_token") === null ? false : true
+    
   );
   return (
     <userContext.Provider value={{ user, setUser }}>

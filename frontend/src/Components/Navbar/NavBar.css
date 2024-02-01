@@ -1,33 +1,35 @@
 :root {
   --search-field-bg-color: #c1c1c1;
+  --nav-bg: #f2f2f2;
 }
 
 nav {
   width: 100%;
-  background-color: #2f2f2f;
-  color: white;
+  background-color: var(--nav-bg);
+  color: #000;
   position: fixed;
   left: 0;
   right: 0;
   top: 0;
 
   display: grid;
-  grid-template-columns: auto 1fr 300px;
-  grid-template-areas: "logo mid profile";
+  grid-template-columns: 45% auto 300px;
+  grid-template-areas: "mid logo profile";
   height: 5rem;
   font-size: small;
+  gap: 0;
 
   z-index: 999999;
 }
 .auth-user-btn:hover {
-  color: lightgray;
+  color: #000;
 }
 .line-effect:has(> a.active)::after {
   content: "";
   display: block;
   width: 100%;
   height: 1px;
-  background-color: lightgray;
+  background-color: #000;
   transform: scaleX(1);
   transition: transform 100ms ease-in-out;
 }
@@ -48,7 +50,7 @@ nav {
   display: block;
   width: 100%;
   height: 3px;
-  background-color: #fff;
+  background-color: #000;
   border-radius: 20px;
   transition: all 250ms ease-out;
 }
@@ -56,7 +58,8 @@ nav {
 .mid {
   grid-area: mid;
   display: flex;
-  justify-content: space-around;
+  gap: 1rem;
+  justify-content: center;
 }
 .form-area {
   display: flex;
@@ -68,8 +71,13 @@ nav {
   grid-area: logo;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 1rem;
+  justify-content: start;
+  margin: 0rem;
+  padding-left: 3rem;
+}
+.logo > h3 {
+  font-weight: 600;
+  font-size: 2.27rem;
 }
 .menu {
   display: flex;
@@ -79,7 +87,7 @@ nav {
 .menu ul {
   list-style: none;
   display: flex;
-  gap: 3rem;
+  gap: 2rem;
   margin: 0;
   padding: 0;
   align-items: center;
@@ -87,37 +95,7 @@ nav {
 }
 nav a {
   text-decoration: none;
-  color: white;
-}
-
-.search-field {
-  display: flex;
-  background-color: white;
-  align-items: center;
-  justify-content: flex-start;
-  border-radius: 7px;
-  height: 60%;
-  width: 100%;
-  background-color: var(--search-field-bg-color);
-}
-.inp-field {
-  border: 0;
-  outline: none;
-  height: 100%;
-  border-radius: 7px;
-  width: 65%;
-  padding-left: 1em;
-  background-color: var(--search-field-bg-color);
-}
-.search-btn {
-  border: 0;
-  background-color: #000;
-  color: white;
-  margin: 2px;
-  height: 90%;
-  border-radius: 7px;
-  align-self: flex-end;
-  width: 35%;
+  color: #000;
 }
 
 .profile {
@@ -145,96 +123,6 @@ nav a {
   transition: all 250ms ease-out;
 }
 
-@media (max-width: 1024px) and (min-width: 800px) {
-  nav {
-    grid-template-columns: 100px auto 300px 300px;
-    grid-template-rows: 5rem;
-    grid-template-areas: "ham logo mid profile";
-    place-items: center;
-  }
-  .mid {
-    height: 5rem;
-  }
-  .menu ul li:not(:last-child) {
-    border-right: 1px solid #000;
-    padding-right: 1em;
-  }
-
-  .menu {
-    padding-block: 1em;
-    position: absolute;
-    background-color: #2f2f2f;
-    left: 0;
-    right: 0;
-    top: 5rem;
-    transform: translateY(-10em);
-    transition: transform 200ms ease-in;
-  }
-  .form-area {
-    width: 30vw;
-  }
-  nav * {
-    z-index: 9;
-  }
-  .menu ul {
-    gap: 2em;
-    flex-wrap: wrap;
-  }
-  .hamburger-btn {
-    display: flex;
-    grid-area: ham;
-    align-self: center;
-    margin: 1em;
-  }
-}
-@media (max-width: 800px) {
-  nav {
-    grid-template-columns: 100px 1fr 200px;
-    grid-template-rows: 5rem;
-    grid-template-areas: "ham logo profile";
-    place-items: center;
-  }
-  .search-field {
-    width: 80%;
-    height: 50px;
-  }
-  .profile {
-    justify-self: self-start;
-  }
-  .mid {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 5rem;
-    flex-direction: column-reverse;
-    background-color: #2f2f2f;
-    align-items: center;
-    transform: translateY(-200%);
-    transition: transform 200ms ease-in;
-  }
-
-  .menu {
-    margin-block: 1em;
-  }
-  .menu ul {
-    gap: 1em;
-    flex-wrap: wrap;
-  }
-  .menu ul li:not(:last-child) {
-    border-right: 1px solid #000;
-    padding-right: 1em;
-  }
-  .form-area {
-    height: 60px;
-    width: 70vw;
-  }
-  .hamburger-btn {
-    display: flex;
-    grid-area: ham;
-    align-self: center;
-    margin: 1em;
-  }
-}
 .auth-btn.profile {
   gap: 0;
 }
@@ -274,8 +162,115 @@ li.line-effect::after {
 .profile-btn {
   background: none;
   border: 0;
-  color: #fff;
+  color: #000;
 }
 .profile-info .profile-tooltip {
   padding: 1rem;
+}
+
+
+@media (max-width: 1024px) and (min-width: 800px) {
+  nav {
+    grid-template-columns: 100px auto 300px 300px;
+    grid-template-rows: 5rem;
+    grid-template-areas: "ham logo mid profile";
+    place-items: center;
+  }
+  .mid {
+    height: 5rem;
+  }
+  .menu ul li:not(:last-child) {
+    border-right: 1px solid #000;
+    padding-right: 1em;
+  }
+
+  .menu {
+    padding-block: 1em;
+    position: absolute;
+    background-color: var(--nav-bg);
+    left: 0;
+    right: 0;
+    top: 5rem;
+    transform: translateY(-10em);
+    transition: transform 200ms ease-in;
+  }
+  .form-area {
+    width: 30vw;
+  }
+  nav * {
+    z-index: 9;
+  }
+  .menu ul {
+    gap: 2em;
+    flex-wrap: wrap;
+  }
+  .hamburger-btn {
+    display: flex;
+    grid-area: ham;
+    align-self: center;
+    margin: 1em;
+  }
+}
+@media (max-width: 800px) {
+  nav {
+    grid-template-columns: 100px 1fr 1fr;
+    grid-template-rows: 5rem;
+    grid-template-areas: "ham logo profile";
+    place-items: center;
+  }
+  /* .search-field {
+    width: 70%;
+    height: 50px;
+  } */
+  .logo{
+    padding-left: 0;
+  }
+  .profile {
+    justify-self: self-start;
+    font-size: small;
+  }
+  .mid {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 5rem;
+    flex-direction: column-reverse;
+    background-color: var(--nav-bg);
+    align-items: center;
+    transform: translateY(-200%);
+    transition: transform 200ms ease-in;
+  }
+
+  .menu {
+    margin-block: 1em;
+  }
+  .menu ul {
+    gap: 1em;
+    flex-wrap: wrap;
+  }
+  .menu ul li:not(:last-child) {
+    border-right: 1px solid #000;
+    padding-right: 1em;
+  }
+  .form-area {
+    height: 60px;
+    width: 70vw;
+  }
+  .hamburger-btn {
+    display: flex;
+    grid-area: ham;
+    align-self: center;
+    margin: 1em;
+  }
+  .auth-btn{
+    flex-direction: column;
+    justify-self: center;
+  }
+  .auth-btn .btn{
+    padding-inline: 0;
+  }
+  .auth-btn .btn:first-child {
+    border-right: 0px;
+    border-bottom: 1px solid black;
+  }
 }

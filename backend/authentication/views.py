@@ -70,14 +70,15 @@ class LogOutUser(APIView):
             return Response({"message": "token is invalid!"}, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['GET'])
-@permission_classes([AllowAny])
-@authentication_classes([])
-def check_user_is_authenticated(request):
-    print(request.user)
-    authenticated = request.user.is_authenticated
-    print(authenticated)
-    return Response(authenticated, status=status.HTTP_200_OK)
+class CheckAuthenticationView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = [JWTAuthentication]
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return Response(True, status=status.HTTP_200_OK)
+        else:
+            return Response(False, status=status.HTTP_200_OK)
 
 
 @method_decorator(ensure_csrf_cookie, name='dispatch')

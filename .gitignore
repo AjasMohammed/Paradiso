@@ -3,6 +3,8 @@
 #BACKEND
 paradiso/
 ecom/
+media/
+/media/**/*.jpg
 
 
 # FRONTEND

@@ -6,6 +6,7 @@ import axios from "../../Constants/axios";
 
 import { ShoppingCart, UserCircle, Heart } from "lucide-react";
 import { Tooltip } from "react-tooltip";
+import SearchField from "./SearchField/SearchField";
 
 function NavBar(props) {
   const { loadNav } = props;
@@ -44,6 +45,7 @@ function NavBar(props) {
   };
 
   useEffect(() => {
+    console.log(user);
     if (user == true) {
       axios.get("shop/get-cart-items/true").then((response) => {
         let data = response.data;
@@ -81,6 +83,8 @@ function NavBar(props) {
       });
   };
 
+
+
   return (
     <>
       <nav>
@@ -111,16 +115,7 @@ function NavBar(props) {
           </div>
 
           <div className="form-area">
-            <form action="" className="search-field">
-              <input
-                type="text"
-                className="inp-field"
-                placeholder="Search Products"
-              />
-              <button className="search-btn" type="submit">
-                SEARCH
-              </button>
-            </form>
+            <SearchField/>
           </div>
         </div>
 

@@ -1,8 +1,6 @@
-from asyncio import format_helpers
 import mimetypes
 from django.contrib import admin
 from django.http import HttpResponse
-from django.urls import reverse
 from django.utils.safestring import mark_safe
 from .models import *
 
@@ -14,8 +12,10 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'price')
-    list_filter = ('category', 'tags')
+    list_display = ('id', 'name', 'current_price', 'raw_price')
+    list_display_links = ('id', 'name', 'current_price', 'raw_price')
+    list_filter = ('category', 'brand')
+    search_fields = ('name__istartswith', 'name__icontains')
     inlines = [ProductImageInline]
 
 
@@ -43,13 +43,10 @@ class ProductImageAdmin(admin.ModelAdmin):
         return response
     view_image.short_description = 'View Image'
 
-
-
     def image_preview(self, obj):
         return mark_safe(f'<img src="{obj.image.url}" alt="Image" style="max-height: 100px; max-width: 100px;" />')
 
     image_preview.short_description = 'Image Preview'
-
 
 
 class OrderItemsInline(admin.TabularInline):
@@ -80,7 +77,9 @@ class CartAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Category)
-admin.site.register(Tag)
+admin.site.register(SubCategory)
 admin.site.register(CartItem)
 admin.site.register(Favorite)
 admin.site.register(OrderItem)
+admin.site.register(Brand)
+admin.site.register(Variants)

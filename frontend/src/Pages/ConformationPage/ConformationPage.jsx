@@ -3,6 +3,12 @@ import "./ConformationPage.css";
 import { cartContext } from "../../Store/Context";
 import ProductCard from "../../Components/ProductCard/ProductCard";
 import axios from "../../Constants/axios";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js/pure";
+import CheckoutForm from "../../Components/CheckoutForm/CheckoutForm";
+
+
+const stripPromise = loadStripe('pk_test_51Np6VHSA71CBHoaJrOi7kCIhgvbW0AvueVLGfP9WByg9sFlRVNlMXHZDGV88nbJTfyxJZr0PGWlXR6rLkt9wY1IG00OkMzrjGe')
 
 function ConformationPage() {
   const { cartItems, setCartItems, totalAmount, setTotalAmount } = useContext(cartContext);
@@ -155,6 +161,11 @@ function ConformationPage() {
             </button>
           </div>
         </form>
+      <div>
+              <Elements stripe={stripPromise}>
+      <CheckoutForm/>
+      </Elements>
+      </div>
       </div>
     </div>
   );
