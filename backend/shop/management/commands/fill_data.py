@@ -49,7 +49,6 @@ class Command(BaseCommand):
                 if category:
                     category_mod, _ = Category.objects.get_or_create(
                         name=category)
-                    category_mod.subcategory.add(subcategory_mod)
                 if brand:
                     brand_mod, _ = Brand.objects.get_or_create(
                         name=brand, url=brand_url)
@@ -68,6 +67,7 @@ class Command(BaseCommand):
                     current_price=round(float(current_price), 2),
                     raw_price=round(float(raw_price), 2),
                     category=category_mod,
+                    subcategory=subcategory_mod,
                     brand=brand_mod,
                     description=description
                 )
@@ -77,11 +77,11 @@ class Command(BaseCommand):
                 self.save_image(name=name, image_url=image_url,
                                 instance=product_image)
 
-                varient_0 = Variation(product=product, color=variation_0_color)
+                varient_0 = Variants(product=product, color=variation_0_color)
                 self.save_image(name=name, image_url=variation_0_image,
                                 instance=varient_0, color=variation_0_color)
 
-                varient_1 = Variation(product=product, color=variation_1_color)
+                varient_1 = Variants(product=product, color=variation_1_color)
                 self.save_image(name=name, image_url=variation_1_image,
                                 instance=varient_1, color=variation_1_color)
 

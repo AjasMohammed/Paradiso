@@ -7,10 +7,16 @@ class SubCategorySerializer(serializers.ModelSerializer):
         model = SubCategory
         fields = '__all__'
 
+
 class CategorySerializer(serializers.ModelSerializer):
-    subcategory = SubCategorySerializer(many=True)
     class Meta:
         model = Category
+        fields = '__all__'
+
+
+class VarientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Variants
         fields = '__all__'
 
 
@@ -19,10 +25,14 @@ class ProductImageSerializer(serializers.ModelSerializer):
         model = ProductImage
         fields = '__all__'
 
+
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
+    subcategory = SubCategorySerializer()
+
     productimage_set = ProductImageSerializer(many=True, read_only=True)
-    
+    variants_set = VarientSerializer(many=True)
+
     class Meta:
         model = Product
         fields = '__all__'
@@ -30,6 +40,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class CartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
+
     class Meta:
         model = CartItem
         fields = "__all__"
@@ -37,6 +48,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     cart_item = CartItemSerializer(many=True)
+
     class Meta:
         model = Cart
         fields = "__all__"
@@ -44,6 +56,7 @@ class CartSerializer(serializers.ModelSerializer):
 
 class FavoriteSerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True)
+
     class Meta:
         model = Favorite
         fields = "__all__"
@@ -51,13 +64,15 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 class OrderItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
+
     class Meta:
         model = OrderItem
         fields = "__all__"
 
+
 class OrderSerializer(serializers.ModelSerializer):
     products = OrderItemSerializer(many=True, read_only=True)
+
     class Meta:
         model = Order
         fields = "__all__"
-
