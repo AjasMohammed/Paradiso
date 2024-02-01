@@ -123,6 +123,52 @@ nav a {
   transition: all 250ms ease-out;
 }
 
+.auth-btn.profile {
+  gap: 0;
+}
+.auth-btn .btn {
+  border: 0;
+  border-radius: 0;
+  font-weight: 600;
+  background-color: transparent;
+}
+.auth-btn .btn:first-child {
+  border-right: 1px solid black;
+}
+.auth-btn .btn:active {
+  background-color: transparent;
+}
+.auth-btn .btn:hover {
+  color: var(--search-field-bg-color);
+}
+li.line-effect::after {
+  background-color: lightgray;
+}
+
+.cart {
+  position: relative;
+  cursor: pointer;
+}
+.cart-items {
+  position: absolute;
+  right: -8px;
+  top: -2px;
+  font-size: 12px;
+  background-color: black;
+  margin: 0;
+  border-radius: 35px;
+  padding-inline: 5px;
+}
+.profile-btn {
+  background: none;
+  border: 0;
+  color: #000;
+}
+.profile-info .profile-tooltip {
+  padding: 1rem;
+}
+
+
 @media (max-width: 1024px) and (min-width: 800px) {
   nav {
     grid-template-columns: 100px auto 300px 300px;
@@ -216,48 +262,15 @@ nav a {
     align-self: center;
     margin: 1em;
   }
-}
-.auth-btn.profile {
-  gap: 0;
-}
-.auth-btn .btn {
-  border: 0;
-  border-radius: 0;
-  font-weight: 600;
-  background-color: transparent;
-}
-.auth-btn .btn:first-child {
-  border-right: 1px solid black;
-}
-.auth-btn .btn:active {
-  background-color: transparent;
-}
-.auth-btn .btn:hover {
-  color: var(--search-field-bg-color);
-}
-li.line-effect::after {
-  background-color: lightgray;
-}
-
-.cart {
-  position: relative;
-  cursor: pointer;
-}
-.cart-items {
-  position: absolute;
-  right: -8px;
-  top: -2px;
-  font-size: 12px;
-  background-color: black;
-  margin: 0;
-  border-radius: 35px;
-  padding-inline: 5px;
-}
-.profile-btn {
-  background: none;
-  border: 0;
-  color: #000;
-}
-.profile-info .profile-tooltip {
-  padding: 1rem;
+  .auth-btn{
+    flex-direction: column;
+    justify-self: center;
+  }
+  .auth-btn .btn{
+    padding-inline: 0;
+  }
+  .auth-btn .btn:first-child {
+    border-right: 0px;
+    border-bottom: 1px solid black;
+  }
 }

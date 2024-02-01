@@ -1,8 +1,6 @@
-from asyncio import format_helpers
 import mimetypes
 from django.contrib import admin
 from django.http import HttpResponse
-from django.urls import reverse
 from django.utils.safestring import mark_safe
 from .models import *
 
@@ -14,8 +12,10 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'price')
+    list_display = ('id', 'name', 'current_price', 'raw_price')
+    list_display_links = ('id', 'name', 'current_price', 'raw_price')
     list_filter = ('category', 'brand')
+    search_fields = ('name__istartswith', 'name__icontains')
     inlines = [ProductImageInline]
 
 

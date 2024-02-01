@@ -3,6 +3,8 @@ from django.core.management.base import BaseCommand
 from shop.models import *
 import requests
 from django.core.files.base import ContentFile
+from io import BytesIO
+from PIL import Image
 
 
 class Command(BaseCommand):
@@ -19,14 +21,18 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         csv_file = kwargs['csv_file']
 
-        with open(csv_file, 'r') as file:
+        with open(csv_file, 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             index = 0
             for data in reader:
                 category = data.get('category', None)
                 subcategory = data.get('subcategory', None)
                 name = data.get('name', None)
-                price = data.get('price', None)
+                current_price = data.get('current_price', None)
+                raw_price = data.get('raw_price', None)
+                discount = data.get('discount', None)
+                likes_count = data.get('likes_count', 0)
+                is_new = data.get('is_new', False)
                 brand = data.get('brand', None)
                 brand_url = data.get('brand_url', None)
                 variation_0_color = data.get('variation_0_color', None)
@@ -56,7 +62,11 @@ class Command(BaseCommand):
                     continue
                 product = Product(
                     name=name,
-                    price=round(float(price), 2),
+                    discount=discount,
+                    likes_count=likes_count,
+                    is_new=is_new,
+                    current_price=round(float(current_price), 2),
+                    raw_price=round(float(raw_price), 2),
                     category=category_mod,
                     brand=brand_mod,
                     description=description
@@ -82,17 +92,27 @@ class Command(BaseCommand):
 
     def check_status(self, url):
         if url:
-            response = requests.get(url, headers=self.headers)
-            return response.status_code != 404
+            try:
+                response = requests.get(url, headers=self.headers)
+                return response.status_code != 404
+            except:
+                return False
         return False
 
     def save_image(self, name, image_url, instance, color=None):
         image_status = self.check_status(image_url)
-        if image_url:
+        if image_status:
             img_response = requests.get(image_url, headers=self.headers)
             if img_response.status_code == 200:
                 img_content = img_response.content
                 if color:
                     name += f" {color}_varient"
                 img_name = name.lower().replace(' ', '_') + '.jpg'
-                instance.image.save(img_name, ContentFile(img_content), save=True)
+                try:
+                    instance.image.save(img_name, ContentFile(img_content), save=True)
+                except :
+                    img = Image.open(BytesIO(img_content))
+                    img = img.convert("RGB")
+                    img_byte_arr = BytesIO()
+                    img.save(img_byte_arr, format='JPEG')
+                    instance.image.save(img_name, ContentFile(img_byte_arr.getvalue()), save=True)

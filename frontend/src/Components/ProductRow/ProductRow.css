@@ -1,6 +1,9 @@
 .prod-row ul{
     gap: 1rem;
 }
+.prod-row{
+    margin-block: 1.5rem;
+}
 @media(min-width:880px){
     .prod-row ul{
         margin-inline: 4em;

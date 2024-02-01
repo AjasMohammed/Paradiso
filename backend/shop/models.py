@@ -39,10 +39,15 @@ class Brand(models.Model):
 class Product(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=1000)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    current_price = models.DecimalField(max_digits=10, decimal_places=2)
+    raw_price = models.DecimalField(max_digits=10, decimal_places=2)
+    discount = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.DO_NOTHING, null=True, blank=True)
     description = models.TextField(max_length=100000, null=True, blank=True)
+
+    likes_count  = models.IntegerField()
+    is_new = models.BooleanField()
 
     class Meta:
         ordering = ['id']
@@ -60,7 +65,7 @@ class ProductImage(models.Model):
         path = f'products/{directory_name}/{filename}'
         return path
 
-    image = models.ImageField(upload_to=get_image_upload_path, max_length=500)
+    image = models.ImageField(upload_to=get_image_upload_path, max_length=5000)
     thumbnail = models.ImageField(
         upload_to='products/thumbnails', null=True, blank=True)
 

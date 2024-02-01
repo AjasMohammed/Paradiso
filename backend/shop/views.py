@@ -4,15 +4,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from django.core.files import File
-from io import BytesIO
-import requests
 import random
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.db.models import Q
+from django.db.models import Q, Window, F
 from decouple import config
 import stripe
+from django.db.models.functions import RowNumber
 
 
 class ProductsView(APIView):
@@ -20,7 +18,13 @@ class ProductsView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, format=None):
-        products = Product.objects.all().order_by('category__name')
+        # products = Product.objects.all().order_by('category__subcategory__name')
+        products = Product.objects.annotate(
+            row_number=Window(
+                expression=RowNumber(),
+                partition_by=[F('category__id')],
+            )
+        ).filter(row_number__lte=20).order_by('category__id')
         serializer = ProductSerializer(products, many=True)
         data = serializer.data
 
@@ -239,40 +243,4 @@ def payment(request):
         amount=1000, currency='inr',
         payment_method_types=['card'],
         receipt_email='test@example.com')
-    return Response(data= test_payment_intent, status=status.HTTP_200_OK)
-
-def addProd():
-
-    url = "https://fakestoreapi.com/products"
-
-    response = requests.get(url)
-    items = response.json()
-
-    for item in items:
-        id = item['id']
-        title = item['title']
-        price = item['price']
-        category = item['category']
-        description = item['description']
-        image_url = item['image']
-        # rating = item['rating']['rate']
-        likes = item['rating']['count']
-        tags = category.split(' ')
-
-        category, _ = Category.objects.get_or_create(name=category)
-        prod = Product(name=title, price=price, category=category,
-                       description=description, likes=likes)
-        prod.save()
-
-        for tag in tags:
-            tag, _ = Tag.objects.get_or_create(name=tag)
-            prod.tags.add(tag)
-
-        # Fetch the image from the URL and save it to the media folder
-        img_content = requests.get(image_url).content
-        # Create a BytesIO object from the image content
-        img_bytes_io = BytesIO(img_content)
-        prod_image = ProductImage(product=prod)
-        prod_image.image.save(f"{id}.jpg", File(img_bytes_io))
-
-        print(f'Produt: {id} added......')
+    return Response(data=test_payment_intent, status=status.HTTP_200_OK)
