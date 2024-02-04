@@ -12,11 +12,14 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'current_price', 'raw_price')
+    list_display = ('id', 'name', 'current_price', 'raw_price', 'get_subcategory_name')
     list_display_links = ('id', 'name', 'current_price', 'raw_price')
     list_filter = ('category', 'brand')
     search_fields = ('name__istartswith', 'name__icontains')
     inlines = [ProductImageInline]
+
+    def get_subcategory_name(self, obj):
+        return obj.subcategory.name if obj.subcategory else None
 
 
 @admin.register(ProductImage)
@@ -76,8 +79,14 @@ class CartAdmin(admin.ModelAdmin):
     inlines = [CartItemInline]
 
 
+class SubCategoryAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    list_display_links = ['id', 'name']
+
+    search_fields = ['name__icontains']
+
 admin.site.register(Category)
-admin.site.register(SubCategory)
+admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(CartItem)
 admin.site.register(Favorite)
 admin.site.register(OrderItem)

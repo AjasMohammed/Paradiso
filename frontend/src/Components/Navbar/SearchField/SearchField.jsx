@@ -14,7 +14,7 @@ function SearchField() {
   const handleSearch = (e) => {
     e.preventDefault();
     axios
-      .get(`shop/search-query?query=${query}`)
+      .get(`shop/search-query/?query=${query}`)
       .then((response) => {
         console.log(response.data);
       })

@@ -2,14 +2,14 @@ import React, {useEffect, useState} from 'react'
 import './Shop.css'
 import axio from '../../Constants/axios'
 import ProductRow from '../../Components/ProductRow/ProductRow'
-import { Link } from 'react-router-dom'
+import ErrorBoundary from '../../Components/ErrorBoundries/ErrorBoundries'
 
 function Shop() {
 
     const [data, setData] = useState(null)
 
     useEffect (() => {
-        axio.get('shop/products').then((response) => {
+        axio.get('shop/products/').then((response) => {
             const data = response.data
             const keys = Object.entries(data)
             setData(keys)
@@ -18,17 +18,17 @@ function Shop() {
     }, [])
   return (
     <>
+    <ErrorBoundary>
+
       {data && data.map(([category, productRow], index) => {
         return (
-          <div key={index} className="product-row">
-            <h1 className="category-title line-effect">
-              <Link to={`/shop/category/${category}`} className='category-link'>{category}</Link>
-            </h1>
-            <ProductRow productRow={productRow} id={index} />
+          <div key={index} className={`product-row bg-${category}`}>
+            <ProductRow productRow={productRow} category={category} id={index} />
           </div>
         );
       })
-        }
+    }
+    </ErrorBoundary>
     </>
     
   );

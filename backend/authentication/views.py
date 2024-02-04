@@ -72,7 +72,7 @@ class LogOutUser(APIView):
 
 class CheckAuthenticationView(APIView):
     permission_classes = [AllowAny]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = []
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:

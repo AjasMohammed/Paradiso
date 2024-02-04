@@ -2,6 +2,7 @@ from django.db import models
 from PIL import Image
 from io import BytesIO
 from django.core.files import File
+from Utility.compress_image import compress_image
 
 
 class Variants(models.Model):
@@ -18,7 +19,7 @@ class Variants(models.Model):
         upload_to='products/thumbnails', null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+        self.image = compress_image(self.image)
         if not self.thumbnail:
             img = Image.open(self.image)
             output_size = (200, 200)

@@ -1,12 +1,83 @@
-.prod-row ul{
-    gap: 1rem;
+.prod-row ul {
+  gap: 1rem;
 }
-.prod-row{
+/* .prod-row{
     margin-block: 1.5rem;
+} */
+.bg-img {
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background-position: center; */
+  background-attachment: fixed;
+  width: 100svw;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 2rem;
 }
-@media(min-width:880px){
-    .prod-row ul{
-        margin-inline: 4em;
-    }
+.bg-image-shop-men {
+  background-image: url("../../../public/assets/images/men/bg/bg-mens-2.jpg");
+}
+.bg-image-shop-women {
+  background-image: url("../../../public/assets/images/women/bg/bg-women-1.jpg");
+}
+.bg-image-shop-bags {
+  background-image: url("../../../public/assets/images/bags/bg/bags-bg-3.jpg");
+}
+.bg-image-shop-shoes {
+  background-image: url("../../../public/assets/images/shoes/bg/bg-shoes-3.jpg");
+}
 
+.category-title {
+  font-weight: 900;
+  font-size: 5rem;
+  text-align: left;
+  -webkit-text-stroke: 5px;
+}
+.category-link-title {
+  font-size: 4rem;
+  font-weight: 900;
+  text-transform: capitalize;
+  -webkit-text-stroke: 5px;
+}
+.category-link-title::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 4px;
+  background-color: black;
+}
+.title-text-men {
+  margin-left: 50%;
+  color: #8fbc8f;
+}
+.title-text-women {
+  margin-right: 45%;
+  color: #fffaf0;
+}
+
+.title-text-bags {
+  color: burlywood;
+  margin-left: 50%;
+}
+.title-text-shoes {
+  color: gainsboro;
+  margin-right: 50%;
+}
+.subcategory-section {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, 23rem);
+}
+.section-bags,
+.section-shoes {
+  grid-template-rows: 23rem;
+}
+
+@media (min-width: 880px) {
+  .prod-row ul {
+    margin-inline: 4em;
+  }
 }

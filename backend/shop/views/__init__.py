@@ -3,6 +3,7 @@ from .products_view import SingleProductView
 from .products_view import LikeProductView
 
 from .category_view import CategoryProducts
+from .category_view import GetSubCategories
 
 from .cart_view import AddToCart
 from .cart_view import RemoveFromCart
@@ -17,3 +18,5 @@ from .order_view import PlaceOrder
 from .search_query_view import SearchQuery
 
 from .payment_view import Payment
+
+from .related_products import RelatedProducts

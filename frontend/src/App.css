@@ -3,6 +3,7 @@
 }
 body {
   background-color: lightgray;
+  overflow-x: hidden;
 }
 .App {
   text-align: center;

@@ -1,5 +1,5 @@
 from shop.models import Product
-from shop.serializers import ProductSerializer
+from shop.serializers import ProductViewSerializer, CardProductSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,6 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.db.models import Window, F
 from django.db.models.functions import RowNumber
+from Utility.set_cache_headers import set_cache_headers
 
 
 class ProductsView(APIView):
@@ -23,8 +24,8 @@ class ProductsView(APIView):
                 expression=RowNumber(),
                 partition_by=[F('category__id')],
             )
-        ).filter(row_number__lte=20).order_by('category__id')
-        serializer = ProductSerializer(products, many=True)
+        ).filter(row_number__lte=10)
+        serializer = CardProductSerializer(products, many=True)
         data = serializer.data
 
         ordered_products = {}
@@ -34,7 +35,10 @@ class ProductsView(APIView):
                 ordered_products[category_name] = []
             ordered_products[category_name].append(item)
 
-        return Response(ordered_products, status=status.HTTP_200_OK)
+        response = set_cache_headers(Response(ordered_products, status=status.HTTP_200_OK))
+
+        return response
+
 
 
 class SingleProductView(APIView):
@@ -43,7 +47,7 @@ class SingleProductView(APIView):
 
     def get(self, request, id):
         product = Product.objects.get(id=id)
-        serializer = ProductSerializer(product)
+        serializer = ProductViewSerializer(product)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
     

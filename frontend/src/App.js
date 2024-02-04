@@ -67,7 +67,7 @@ function App() {
             <Route path="/cart/" Component={Cart} />
             <Route path="/favorites/" Component={FavoriteItems} />
             <Route
-              path="/shop/category/:categoryName"
+              path="/shop/category/:categoryName/:subcategoryName?"
               Component={CategoryPage}
             />
             <Route path="/shop/cart/place-order" Component={ConformationPage} />
