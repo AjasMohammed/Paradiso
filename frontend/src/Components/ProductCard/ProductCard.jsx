@@ -6,7 +6,6 @@ import TruncateText from "../TruncateText/TruncateText";
 
 function ProductCard(props) {
   const { product } = props;
-  console.log(product.productimage_set[0].thumbnail);
 
   const rupeeFormatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -20,9 +19,10 @@ function ProductCard(props) {
           <div className="card">
             <div className="card-image">
             <img
-              src={BASE_URL + product.productimage_set[0].image}
+              src={BASE_URL + product.productimage_set[0].thumbnail}
               className="card-img-top"
               alt={product.name}
+              loading="lazy"
             />
             </div>
             <div className="card-body">

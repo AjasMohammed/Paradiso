@@ -47,7 +47,7 @@ function NavBar(props) {
   useEffect(() => {
     console.log(user);
     if (user == true) {
-      axios.get("shop/get-cart-items/true").then((response) => {
+      axios.get("shop/get-cart-items/true/").then((response) => {
         let data = response.data;
         const { count } = data;
         setCartItemsCount(count);

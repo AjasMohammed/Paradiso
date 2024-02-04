@@ -1,4 +1,8 @@
-.category-page.category-title{
-    margin-inline: auto;
-    margin-block: 2rem;
+#category-container{
+    position: relative;
+    
+}
+
+.card-items .card{
+    width: 14rem;
 }

@@ -39,7 +39,7 @@ function ConformationPage() {
     };
     axios.defaults.xsrfCookieName = "csrftoken";
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
-    axios.post("shop/place-order", data).then((response) => {
+    axios.post("shop/place-order/", data).then((response) => {
       console.log(response.data);
     });
   };

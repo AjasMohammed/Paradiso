@@ -1,33 +1,38 @@
 import React, { useEffect, useState } from "react";
 import "./ProductRow.css";
 import ProductCard from "../ProductCard/ProductCard";
-
+import SamplCard from '../SampleCard/SampleCard'
+import axios from "../../Constants/axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { Link } from 'react-router-dom'
+
 
 function ProductRow(props) {
-  const { productRow } = props;
-  const [row1, setRow1] = useState([]);
-  const [row2, setRow2] = useState([]);
+  const { productRow, category } = props;
   const [viewArrow, setViewArrow] = useState(false);
   const [isDraggable, setIsDraggable] = useState(false);
+  const [subCategories, setSubCategories] = useState([])
 
-  const splitRow = (row) => {
-    let midpoint = Math.ceil(row.length / 2);
-
-    setRow1(row.slice(0, midpoint));
-    setRow2(row.slice(midpoint));
+  const categoryText = {
+    men: "Upgrade Your Wardrobe, Elevate Your Style – Shop Men's Fashion Today!",
+    women: "Embrace Elegance! Discover the Perfect Look in Women's Fashion",
+    bags: "Carry Chic, Unveil Your Style with our Trendsetting Bags and Wallets Collection",
+    shoes: "Step into Style! Explore Fashion-forward Shoes for Every Occasion!",
+  };
+  const getSubCategory = (category) => {
+    axios.get(`shop/product-subcategory/${category}/`).then((response) => {
+      setSubCategories(response.data);
+    });
   };
   useEffect(() => {
-    splitRow(productRow);
-  }, [productRow]);
-  useEffect(() => {
+    getSubCategory(category);
     if (window.innerWidth >= 900) {
       setViewArrow(true);
-      setIsDraggable(false)
+      setIsDraggable(false);
     } else {
       setViewArrow(false);
-      setIsDraggable(true)
+      setIsDraggable(true);
     }
   }, []);
 
@@ -52,30 +57,31 @@ function ProductRow(props) {
 
   return (
     <>
+      <div className={`bg-image-shop-${category} bg-img`}>
+        <h1 className={`title-text-${category} category-title`}>{categoryText[category]}</h1>
+         <h5 className="category-link-title">
+              <Link to={`/shop/category/${category}`} className='category-link'>{category}</Link>
+            </h5>
+      </div>
       <Carousel
         responsive={responsive}
         infinite={true}
         className="prod-row"
         centerMode={true}
-        draggable={false}
+        draggable={isDraggable}
         arrows={viewArrow}
       >
-        {row1.map((product) => {
+        {productRow.map((product) => {
           return <ProductCard key={product.id} product={product} />;
         })}
       </Carousel>
-      <Carousel
-        responsive={responsive}
-        infinite={true}
-        className="prod-row"
-        centerMode={true}
-        draggable={false}
-        arrows={viewArrow}
-      >
-        {row2.map((product) => {
-          return <ProductCard key={product.id} product={product} />;
-        })}
-      </Carousel>
+      <div className={`subcategory-section section-${category}`}>
+        { subCategories &&
+          subCategories.map((subCategory) => {
+            return (<SamplCard key={subCategory.id} subCategory={subCategory} category={category} />)
+          })
+        }
+      </div>
     </>
   );
 }

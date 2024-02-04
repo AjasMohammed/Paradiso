@@ -52,37 +52,34 @@
   color: gray;
 }
 
-
-/* @media (max-width: 1400px) {
+/* 
+@media (max-width: 1400px) {
   .prod-link {
     font-size: 15px;
   }
-}
-@media (max-width: 1100px) {
+} */
+/* @media (max-width: 1100px) {
   .prod-link {
     font-size: 14px;
   }
-}
-@media (max-width: 880px) {
-  .prod-link {
-    font-size: 13px;
+} */
+/* @media (max-width: 880px) {
+  .card{
+    height: 33vh;
   }
-  .prod-name {
-    font-size: 120%;
-  }
-}
-@media (max-width: 720px) {
+} */
+/* @media (max-width: 720px) {
   .prod-link {
     font-size: 11px;
   }
-}
-@media (max-width: 580px) {
-  .prod-link {
-    font-size: 10px;
-  }
-}
-@media (max-width: 380px) {
-  .card-body {
-    padding: 5px;
+} */
+/* @media (max-width: 580px) {
+  .card {
+    height: 41vh;
   }
 } */
+/* @media (max-width: 380px) {
+  .card {
+    height: 30vh;
+  }
+}  */
