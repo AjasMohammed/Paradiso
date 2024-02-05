@@ -1,44 +1,47 @@
-.title{
-    margin-bottom: 2rem;
+.title {
+  margin-bottom: 2rem;
 }
 
-.auth-container{
-    width: min(500px, 80%);
-    padding: 2rem;
-    border-radius: 30px;
-    background-color: #2f2f2f;
-    color: #fff;
-    margin-block: 3rem;
+.auth-container {
+  width: min(500px, 80%);
+  padding: 2rem;
+  border: var(--border-style);
+  border-radius: 30px;
+  background-color: var(--nav-bg);
+  color: #000;
+  margin-block: 3rem;
 }
 
-.register-form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: auto;
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
 }
-label{
-    align-self: flex-start;
+label {
+  align-self: flex-start;
 }
-.register-inp{
-    width: 70%;
-    height: 35px;
-    margin-bottom: 1em;
-    border: 0;
-    border-radius: 7px;
-    outline: none;
-    padding-left: 1em;
+.register-inp {
+  width: 70%;
+  height: 35px;
+  margin-bottom: 1em;
+  border: 0;
+  border-radius: 7px;
+  outline: none;
+  padding-left: 1em;
+  border: var(--border-style);
+  box-shadow: 0 2px black;
 }
-.inp-label{
-    margin-left: 2rem;
-}
-
-.sub-btn{
-    margin-top: 10px;
-    width: 50%;
+.inp-label {
+  margin-left: 2rem;
 }
 
-.wrong-password{
-    outline: 2px solid red;
-    outline-offset: -2px;
+.sub-btn {
+  margin-top: 10px;
+  width: 50%;
 }
+
+/* .wrong-password {
+  outline: 2px solid red;
+  outline-offset: -2px;
+} */

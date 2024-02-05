@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./ProductRow.css";
 import ProductCard from "../ProductCard/ProductCard";
-import SamplCard from '../SampleCard/SampleCard'
+import SamplCard from "../SampleCard/SampleCard";
 import axios from "../../Constants/axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { Link } from 'react-router-dom'
-
+import { Link } from "react-router-dom";
 
 function ProductRow(props) {
   const { productRow, category } = props;
-  const [viewArrow, setViewArrow] = useState(false);
-  const [isDraggable, setIsDraggable] = useState(false);
-  const [subCategories, setSubCategories] = useState([])
+  const [viewArrow, setViewArrow] = useState(window.innerWidth >= 900);
+  const [isDraggable, setIsDraggable] = useState(window.innerWidth < 900);
+  const [subCategories, setSubCategories] = useState([]);
 
   const categoryText = {
     men: "Upgrade Your Wardrobe, Elevate Your Style – Shop Men's Fashion Today!",
@@ -27,14 +26,7 @@ function ProductRow(props) {
   };
   useEffect(() => {
     getSubCategory(category);
-    if (window.innerWidth >= 900) {
-      setViewArrow(true);
-      setIsDraggable(false);
-    } else {
-      setViewArrow(false);
-      setIsDraggable(true);
-    }
-  }, []);
+  }, [category]);
 
   const responsive = {
     superLargeDesktop: {
@@ -58,10 +50,14 @@ function ProductRow(props) {
   return (
     <>
       <div className={`bg-image-shop-${category} bg-img`}>
-        <h1 className={`title-text-${category} category-title`}>{categoryText[category]}</h1>
-         <h5 className="category-link-title">
-              <Link to={`/shop/category/${category}`} className='category-link'>{category}</Link>
-            </h5>
+        <h1 className={`title-text-${category} category-title`}>
+          {categoryText[category]}
+        </h1>
+        <h5 className="category-link-title">
+          <Link to={`/shop/category/${category}`} className="category-link">
+            {category}
+          </Link>
+        </h5>
       </div>
       <Carousel
         responsive={responsive}
@@ -76,11 +72,16 @@ function ProductRow(props) {
         })}
       </Carousel>
       <div className={`subcategory-section section-${category}`}>
-        { subCategories &&
+        {subCategories &&
           subCategories.map((subCategory) => {
-            return (<SamplCard key={subCategory.id} subCategory={subCategory} category={category} />)
-          })
-        }
+            return (
+              <SamplCard
+                key={subCategory.id}
+                subCategory={subCategory}
+                category={category}
+              />
+            );
+          })}
       </div>
     </>
   );

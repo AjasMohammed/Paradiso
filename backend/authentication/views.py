@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 
 
 class RegisterUser(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def post(self, request):

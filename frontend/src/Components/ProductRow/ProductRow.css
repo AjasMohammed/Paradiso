@@ -1,13 +1,10 @@
 .prod-row ul {
   gap: 1rem;
 }
-/* .prod-row{
-    margin-block: 1.5rem;
-} */
+
 .bg-img {
   background-repeat: no-repeat;
   background-size: cover;
-  /* background-position: center; */
   background-attachment: fixed;
   width: 100svw;
   height: 100svh;
@@ -31,16 +28,16 @@
 }
 
 .category-title {
-  font-weight: 900;
+  font-weight: 700;
   font-size: 5rem;
   text-align: left;
-  -webkit-text-stroke: 5px;
+  /* -webkit-text-stroke: 5px; */
 }
 .category-link-title {
   font-size: 4rem;
-  font-weight: 900;
+  font-weight: 800;
   text-transform: capitalize;
-  -webkit-text-stroke: 5px;
+  /* -webkit-text-stroke: 5px; */
 }
 .category-link-title::after {
   content: "";
@@ -69,7 +66,7 @@
 .subcategory-section {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(2, 23rem);
+  grid-template-rows: repeat(2, 20rem);
 }
 .section-bags,
 .section-shoes {

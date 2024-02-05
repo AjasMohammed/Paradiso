@@ -54,7 +54,7 @@ function Register() {
           onChange={passwordInput}
         />
 
-        <button type="submit" className="btn btn-outline-light sub-btn">
+        <button type="submit" className="btn btn-outline-dark sub-btn">
           LogIn
         </button>
       </form>

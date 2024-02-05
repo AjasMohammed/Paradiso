@@ -10,9 +10,7 @@ function Shop() {
 
     useEffect (() => {
         axio.get('shop/products/').then((response) => {
-            const data = response.data
-            const keys = Object.entries(data)
-            setData(keys)
+            setData(response.data)
 
         })
     }, [])
@@ -20,7 +18,7 @@ function Shop() {
     <>
     <ErrorBoundary>
 
-      {data && data.map(([category, productRow], index) => {
+      {data && Object.entries(data).map(([category, productRow], index) => {
         return (
           <div key={index} className={`product-row bg-${category}`}>
             <ProductRow productRow={productRow} category={category} id={index} />
