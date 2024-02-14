@@ -21,9 +21,6 @@
     align-items: center;
     margin: auto;
 }
-label{
-    align-self: flex-start;
-}
 .register-inp{
     width: 60%;
     height: 35px;

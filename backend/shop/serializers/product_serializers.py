@@ -42,3 +42,12 @@ class CardProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['id', 'name', 'current_price', 'raw_price',
                   'discount', 'category', 'productimage_set']
+
+
+class CheckoutSerializer(serializers.ModelSerializer):
+    productimage_set = ProductImageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'current_price', 'raw_price',
+                  'discount', 'productimage_set']

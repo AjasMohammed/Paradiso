@@ -8,8 +8,8 @@ class Cart(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def update_total(self):
-        total = self.cartitem_set.aggregate(total=models.Sum(
-            models.F('product__price') * models.F('quantity')))['total']
+        total = self.cart_items.aggregate(total=models.Sum(
+            models.F('product__current_price') * models.F('quantity')))['total']
         self.total = total if total is not None else 0
         self.save()
         return self.total
@@ -21,4 +21,4 @@ class Cart(models.Model):
         db_table = "cart"
 
     def __str__(self):
-        return f'Cart for {self.user.username}'
+        return f'Cart for {self.user.email}'

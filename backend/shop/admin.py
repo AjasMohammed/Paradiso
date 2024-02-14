@@ -85,10 +85,21 @@ class SubCategoryAdmin(admin.ModelAdmin):
 
     search_fields = ['name__icontains']
 
+class FavoriteItemsInline(admin.TabularInline):
+    model = Favorite.products.through
+    extra = 1
+
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user']
+    list_display_links = ['id', 'user']
+
+    inlines = [FavoriteItemsInline]
+
+
 admin.site.register(Category)
 admin.site.register(SubCategory, SubCategoryAdmin)
 admin.site.register(CartItem)
-admin.site.register(Favorite)
+admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(OrderItem)
 admin.site.register(Brand)
 admin.site.register(Variants)

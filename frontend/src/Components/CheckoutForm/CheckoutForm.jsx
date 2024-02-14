@@ -1,65 +1,116 @@
-import React from "react";
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useState } from "react";
+import React, { useContext, useState } from "react";
+import "./CheckoutForm.css";
 import axios from "../../Constants/axios";
+import { cartContext } from "../../Store/Context";
 
-function CheckoutForm() {
-  const [error, setError] = useState(null);
-  const [email, setEmail] = useState("");
-  const stripe = useStripe();
-  const elements = useElements();
+function CheckoutForm(props) {
+  const { onUserDetails } = props;
+  const { cartItems, totalAmount } = useContext(cartContext);
 
-  // Handle real-time validation errors from the CardElement.
-  const handleChange = (event) => {
-    if (event.error) {
-      setError(event.error.message);
-    } else {
-      setError(null);
-    }
+  const [phone, setPhone] = useState(null);
+  const [address, setAddress] = useState(null);
+  const [city, setCity] = useState(null);
+  const [zipCode, setZipCode] = useState(null);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // const prodId = cartItems.map((item)=>{
+    //   let data = {
+    //     product: item.id,
+    //     // quantity: 1
+    //   }
+    //   return data
+    // })
+    // console.log(prodId);
+    const data = {
+      phone: phone,
+      address: address,
+      city: city,
+      zipcode: zipCode,
+      amount: totalAmount,
+      products: cartItems,
+    };
+    // axios.defaults.xsrfCookieName = "csrftoken";
+    // axios.defaults.xsrfHeaderName = "X-CSRFToken";
+    // axios.post("shop/place-order/", data).then((response) => {
+    //   if (response.status === 200){
+    //     onUserDetails()
+    //   }
+    // });
+    onUserDetails()
   };
-
-  // Handle form submission.
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const card = elements.getElement(CardElement);
-    const { paymentMethod, error } = await stripe.createPaymentMethod({
-      type: "card",
-      card: card,
-    });
-    console.log(paymentMethod);
-  };
-
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="stripe-form">
-        <div className="form-row">
-          <label htmlFor="email">Email Address</label>
-          <br />
-          <input
-            className="form-control"
-            id="email"
-            name="name"
-            type="email"
-            placeholder="jenny.rosen@example.com"
-            required
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-            }}
-          />
-        </div>
-        <div className="form-row">
-          <label for="card-element">Credit or debit card</label>
-          <CardElement id="card-element" onChange={handleChange} />
-          <div className="card-errors" role="alert">
-            {error}
+    <>
+      <div className="order-form">
+        <form className="row g-3" onSubmit={handleSubmit}>
+          <div className="col-md-6">
+            <label htmlFor="inputPhone4" className="form-label">
+              Phone Number
+            </label>
+            <input
+              required="true"
+              type="tel"
+              className="form-control"
+              id="inputPhone4"
+              onChange={(e) => {
+                setPhone(e.target.value);
+              }}
+            />
           </div>
-        </div>
-        <button type="submit" className="submit-btn">
-          Submit Payment
-        </button>
-      </form>
-    </div>
+          <div className="col-12">
+            <label htmlFor="inputAddress" className="form-label">
+              Address
+            </label>
+            <textarea
+              required="true"
+              type="text"
+              className="form-control"
+              id="inputAddress"
+              onChange={(e) => {
+                setAddress(e.target.value);
+              }}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="inputCity" className="form-label">
+              City
+            </label>
+            <input
+              required="true"
+              type="text"
+              className="form-control"
+              id="inputCity"
+              onChange={(e) => {
+                setCity(e.target.value);
+              }}
+            />
+          </div>
+          <div className="col-md-3">
+            <label htmlFor="inputZip" className="form-label">
+              Zip
+            </label>
+            <input
+              required="true"
+              type="text"
+              className="form-control"
+              id="inputZip"
+              onChange={(e) => {
+                setZipCode(e.target.value);
+              }}
+            />
+          </div>
+          {/* <div className="payment-section">
+            <Elements stripe={stripPromise}>
+            <StripeForm />
+          </Elements>
+          </div> */}
+          <div className="col-12">
+            <button type="submit" className="btn btn-dark">
+              Next
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }
 

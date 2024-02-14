@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.626039a8.css",
-    "main.js": "/static/js/main.64d3a5dd.js",
+    "main.css": "/static/css/main.79333f50.css",
+    "main.js": "/static/js/main.9bfdc602.js",
     "static/media/bg-hero-2.jpg": "/static/media/bg-hero-2.90204773c84cb2e70059.jpg",
     "static/media/bg-shoes-3.jpg": "/static/media/bg-shoes-3.5ef159e8feacda40b320.jpg",
     "static/media/bags-bg-3.jpg": "/static/media/bags-bg-3.a2925cf955be596546ec.jpg",
@@ -29,11 +29,11 @@
     "static/media/revicons.ttf": "/static/media/revicons.57fd05d4ae650374c8de.ttf",
     "static/media/revicons.woff": "/static/media/revicons.e8746a624ed098489406.woff",
     "index.html": "/index.html",
-    "main.626039a8.css.map": "/static/css/main.626039a8.css.map",
-    "main.64d3a5dd.js.map": "/static/js/main.64d3a5dd.js.map"
+    "main.79333f50.css.map": "/static/css/main.79333f50.css.map",
+    "main.9bfdc602.js.map": "/static/js/main.9bfdc602.js.map"
   },
   "entrypoints": [
-    "static/css/main.626039a8.css",
-    "static/js/main.64d3a5dd.js"
+    "static/css/main.79333f50.css",
+    "static/js/main.9bfdc602.js"
   ]
 }

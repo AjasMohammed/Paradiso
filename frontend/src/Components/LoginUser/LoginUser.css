@@ -18,7 +18,7 @@
   align-items: center;
   margin: auto;
 }
-label {
+.auth-container label {
   align-self: flex-start;
 }
 .register-inp {

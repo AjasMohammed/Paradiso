@@ -123,7 +123,6 @@ function NavBar(props) {
           <div className="profile">
             <div className="wish-list">
               <Link to="/favorites/">
-                {/* <i className="fa-regular fa-heart fa-xl"></i> */}
                 <Heart />
               </Link>
             </div>
@@ -132,12 +131,10 @@ function NavBar(props) {
                 {cartItemsCount > 0 ? (
                   <span className="cart-items">{cartItemsCount}</span>
                 ) : null}
-                {/* <i className="fa-solid fa-cart-shopping fa-xl"></i> */}
                 <ShoppingCart />
               </Link>
             </div>
             <div className="profile-info">
-              {/* <i className="fa-regular fa-user fa-xl"></i> */}
               <button data-tooltip-id="profile-btn" className="profile-btn">
                 <UserCircle size={30} strokeWidth={1.5} />
               </button>

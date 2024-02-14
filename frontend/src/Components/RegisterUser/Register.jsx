@@ -5,7 +5,11 @@ import { Navigate } from "react-router-dom";
 import { authContext } from "../../Store/Context";
 
 function Register() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    email: "",
+    password1: "",
+    password2: "",
+  });
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [authentication, setAuthentication] = useState(false);
@@ -16,7 +20,6 @@ function Register() {
   const handleData = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    console.log(formData);
   };
 
   useEffect(() => {
@@ -28,9 +31,10 @@ function Register() {
       setIsDisabled(true);
     } else {
       passwordRef.current.classList.remove("wrong-password");
+      setIsDisabled(false)
     }
     return () => {
-      setIsDisabled(false);
+      setIsDisabled(true);
     };
   }, [formData.password1, formData.password2]);
 
@@ -45,6 +49,7 @@ function Register() {
     axios.post("auth/register/", userData).then((response) => {
       setAuthentication(true);
       setAuth("login");
+      console.log(response);
     });
   };
 
@@ -52,7 +57,7 @@ function Register() {
     <div className="auth-container">
       <h1 className="title">Sign Up</h1>
       <form action="" className="register-form" onSubmit={handleSubmit}>
-        <label className="inp-label" htmlFor="">
+        <label className="inp-label" htmlFor="email">
           Email
         </label>
         <input

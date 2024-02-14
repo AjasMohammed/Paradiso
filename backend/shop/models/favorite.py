@@ -14,4 +14,4 @@ class Favorite(models.Model):
         db_table = "favorite"
 
     def __str__(self):
-        return f"{self.user.username}'s Favorite"
+        return f"{self.user.email}'s Favorite"

@@ -156,7 +156,8 @@ li.line-effect::after {
   font-size: 12px;
   background-color: black;
   margin: 0;
-  border-radius: 35px;
+  border-radius: 100%;
+  color: #fff;
   padding-inline: 5px;
 }
 .profile-btn {

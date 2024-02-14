@@ -25,7 +25,6 @@ class PlaceOrder(APIView):
             order = serializer.save()
 
             for product in products:
-                print(product)
                 OrderItem.objects.create(order=order, product=product)
             
             return Response({'message': 'Order Placed Successfully.'}, status=status.HTTP_200_OK)

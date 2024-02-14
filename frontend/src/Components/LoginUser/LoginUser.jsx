@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./LoginUser.css";
 import axios from "../../Constants/axios";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [authentication, setAuthentication] = useState(false);
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authentication) {
+      navigate("/");
+    }
+
+  }, [authentication]);
   const emailInput = (e) => {
     setEmail(e.target.value);
   };
@@ -40,10 +48,15 @@ function Register() {
     <div className="auth-container">
       <h1 className="title">Log In</h1>
       <form action="" className="register-form" onSubmit={handleSubmit}>
-        <label className="inp-label" htmlFor="">
+        <label className="inp-label" htmlFor="email">
           Email
         </label>
-        <input className="register-inp" type="text" onChange={emailInput} />
+        <input
+          className="register-inp"
+          type="text"
+          name="email"
+          onChange={emailInput}
+        />
 
         <label className="inp-label" htmlFor="">
           Password
@@ -58,7 +71,7 @@ function Register() {
           LogIn
         </button>
       </form>
-      {authentication && (window.location.href = "/")}
+      {/* {authentication && (window.location.href = "/")} */}
     </div>
   );
 }

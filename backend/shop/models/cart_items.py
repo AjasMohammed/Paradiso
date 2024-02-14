@@ -3,7 +3,7 @@ from shop.models import Product, Cart
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
@@ -19,4 +19,4 @@ class CartItem(models.Model):
         db_table = "cart_item"
 
     def __str__(self):
-        return f"{self.quantity} x {self.product.name} in {self.cart.user.username}'s cart"
+        return f"{self.quantity} x {self.product.name} in {self.cart.user.email}'s cart"

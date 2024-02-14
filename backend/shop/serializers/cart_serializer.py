@@ -1,18 +1,18 @@
 from rest_framework import serializers
-from shop.models import CartItem, Cart
-from .product_serializers import ProductViewSerializer
+from shop.models import CartItem, Cart, Product
+from .product_serializers import CheckoutSerializer
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-    product = ProductViewSerializer()
+    product = CheckoutSerializer()
 
     class Meta:
         model = CartItem
-        fields = "__all__"
+        fields = ['id', 'product', 'quantity']
 
 
 class CartSerializer(serializers.ModelSerializer):
-    cart_item = CartItemSerializer(many=True)
+    cart_items = CartItemSerializer(many=True)
 
     class Meta:
         model = Cart

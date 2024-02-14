@@ -1,15 +1,49 @@
 .place-order {
-  margin: 1rem;
   display: flex;
   gap: 1rem;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  border: 2px solid;
+  border-radius: 10px;
+  background-color: #fff;
+  /* height: 50%; */
+  text-align: center;
+  margin: 2rem;
+  grid-column: 2/3;
+  grid-row: 1/3;
 }
 .cart-view {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 80px 1fr;
+}
+.cart-view .card-items{
+  scrollbar-width: none;
+  overflow-y: auto;
+  max-height: 85svh;
+  padding-block: 2rem;
+}
+.cart-view .card-items::-webkit-scrollbar {
+  display: none;
+}
+.cart-view .page-title {
+  grid-column: 1/2;
+  margin-block: auto;
+  text-align: start;
+  margin-left: 10em;
+}
+.place-order p{
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 8rem;
+  gap: 2rem;
+  text-align: left;
+  width: 50%;
+}
+.place-order span{
+  width: 100%;
+}
+
+.delivery-fee del{
+  font-weight: 500;
+  color: #8e8b8b;
 }

@@ -3,6 +3,15 @@ from authentication.models import CustomUser
 
 
 class Order(models.Model):
+    
+    ORDER_STATUS = [
+        ('processing', 'Processing'),
+        ('shipped', 'Shipped'),
+        ('delivered', 'Delivered'),
+        ('cancelled', 'Cancelled'),
+        ('returned', 'Returned'),
+    ]
+
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     address = models.TextField(max_length=10000)
@@ -11,6 +20,7 @@ class Order(models.Model):
     zipcode = models.CharField(max_length=8)
     is_paid = models.BooleanField(default=False)
     is_delivered = models.BooleanField(default=False)
+    status = models.CharField(max_length=100, choices=ORDER_STATUS, default='processing')
 
     class Meta:
         app_label = 'shop'

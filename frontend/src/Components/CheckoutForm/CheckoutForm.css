@@ -1,4 +1,20 @@
-#card-element{
-    border: 2px solid;
-    background-color: white;
+.order-form { 
+  padding-block: 2rem;
+  padding-left: 2rem;
+}
+.order-form input, .order-form textarea{
+    border: 2px solid black;
+}
+.order-form input:focus, .order-form textarea:focus{
+  outline: none;
+}
+.order-form * {
+  text-align: start;
+}
+
+
+@media (max-width: 880px) {
+  .order-form {
+    width: 100%;
+  }
 }
