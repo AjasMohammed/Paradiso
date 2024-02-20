@@ -36,7 +36,7 @@
 .prod-name {
   font-weight: 600;
   text-align: center;
-  font-size: .8em;
+  font-size: 1em;
 }
 .price-tag{
   display: flex;
@@ -45,6 +45,7 @@
   justify-content: center;
 }
 .current-price, .raw-price{
+  font-weight: 500;
   font-size: .9em;
   margin: 0;
 }

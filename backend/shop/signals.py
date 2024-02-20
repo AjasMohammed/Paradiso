@@ -1,7 +1,15 @@
-from shop.models import Product, ProductImage, Variants
-from django.db.models.signals import pre_delete
+from shop.models import Product, ProductImage, Variants, Order, Cart
+from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
 import os
+
+
+@receiver(post_save, sender=Order)
+def clear_cart(sender, instance, created, **kwargs):
+    if created:
+        user = instance.user
+        cart = Cart.objects.get(user=user)
+        cart.delete()
 
 
 @receiver(pre_delete, sender=Product)

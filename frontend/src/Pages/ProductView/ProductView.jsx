@@ -6,8 +6,8 @@ import { BASE_URL } from "../../Constants/config";
 import { Heart } from "lucide-react";
 import { authContext, userContext } from "../../Store/Context";
 import Carousel from "react-multi-carousel";
-import ProductCard from '../../Components/ProductCard/ProductCard'
-import BackButton from '../../Components/BackButton/BackButton'
+import ProductCard from "../../Components/ProductCard/ProductCard";
+import BackButton from "../../Components/BackButton/BackButton";
 
 function ProductView(props) {
   const { loadNav } = props;
@@ -18,7 +18,7 @@ function ProductView(props) {
 
   const [product, setProduct] = useState(null);
   const [images, setImages] = useState({});
-  const [isFavorite, setIsFavorite] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [inCart, setInCart] = useState(false);
 
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -32,9 +32,9 @@ function ProductView(props) {
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
-    setImages([])
+    setImages([]);
     axios.defaults.xsrfCookieName = "csrftoken";
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
     axios.get(`shop/product/${param.id}/`).then((response) => {
@@ -57,12 +57,8 @@ function ProductView(props) {
       axios.get(`shop/check-in-cart/${param.id}/`).then((response) => {
         setInCart(response.data);
       });
-
-      axios.get(`shop/view-favorite?id=${param.id}/`).then((response) => {
-        setIsFavorite(response.data);
-      });
     }
-  }, [inCart, isFavorite, param.id]);
+  }, [inCart, param.id]);
 
   const addToCart = () => {
     if (user === true && user !== null) {
@@ -90,33 +86,43 @@ function ProductView(props) {
         subCategory: product.subcategory.id,
       };
       axios.get("shop/related-products/", { params: data }).then((res) => {
-        setRelatedProducts(res.data)
+        setRelatedProducts(res.data);
       });
     }
   }, [product, param.id]);
 
   useEffect(() => {
     if (user === true) {
-      addToFavorite();
+      axios
+        .get(`shop/favorite/${param.id}/`)
+        .then((response) => {
+          setIsFavorite(response.data);
+        })
+        .catch((e) => {
+          if (e.response.status === 404) {
+            setIsFavorite(false);
+          }
+        });
     } else {
       setIsFavorite(false);
     }
-  }, [isFavorite]);
+  }, [user, param.id]);
 
   const addToFavorite = () => {
-    if (isFavorite === true) {
-      axios.post(`shop/add-to-favorite/${param.id}`);
-    } else if (isFavorite === false) {
-      axios.post(`shop/remove-from-favorite/${param.id}`);
+    if (isFavorite === false) {
+      axios.post(`shop/favorite/${param.id}/`);
+      setIsFavorite(true);
+    } else if (isFavorite === true) {
+      axios.delete(`shop/favorite/${param.id}/`);
+      setIsFavorite(false);
     }
   };
 
-const loadMoreProducts = async () => {
-  setTimeout(() => {
-  setVisibleRP(visibleRP + 8)
-  }, 1000)
-
-}
+  const loadMoreProducts = async () => {
+    setTimeout(() => {
+      setVisibleRP(visibleRP + 8);
+    }, 1000);
+  };
 
   const responsive = {
     superLargeDesktop: {
@@ -139,11 +145,12 @@ const loadMoreProducts = async () => {
 
   return (
     <div className="container" id="product-view">
-      <BackButton/>
+      <BackButton />
       {product && (
         <>
-          {product.discount > 0 ?
-            <div className="discount">{product.discount}% OFF</div>: null}
+          {product.discount > 0 ? (
+            <div className="discount">{product.discount}% OFF</div>
+          ) : null}
           <Carousel
             responsive={responsive}
             infinite={true}
@@ -181,30 +188,24 @@ const loadMoreProducts = async () => {
                 Remove From Cart
               </button>
             )}
-            <button className="btn fav-btn m-2">
-              <Heart
-                className={isFavorite ? "heart-icon" : ""}
-                color="black"
-                onClick={() => setIsFavorite(!isFavorite)}
-              />
+            <button className="btn fav-btn m-2" onClick={addToFavorite}>
+              <Heart className={isFavorite ? "heart-icon" : ""} color="black" />
             </button>
           </div>
         </>
       )}
       <section className="recommendation-section">
         <h2 className="related-products-title">Related Products</h2>
-              <div className="related-products">
-              {
-                relatedProducts.slice(0, visibleRP).map((product) => {
-                 return <ProductCard key={product.id} product={product} />
-                })
-              }
-              </div>
-              {
-                relatedProducts.length > visibleRP ? 
-              <button className="load-more btn btn-dark" onClick={loadMoreProducts}>Load More</button>
-              : null
-              }
+        <div className="related-products">
+          {relatedProducts.slice(0, visibleRP).map((product) => {
+            return <ProductCard key={product.id} product={product} />;
+          })}
+        </div>
+        {relatedProducts.length > visibleRP ? (
+          <button className="load-more btn btn-dark" onClick={loadMoreProducts}>
+            Load More
+          </button>
+        ) : null}
       </section>
     </div>
   );

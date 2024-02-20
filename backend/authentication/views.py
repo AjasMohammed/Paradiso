@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 
 
 class RegisterUser(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -71,10 +71,14 @@ class LogOutUser(APIView):
 
 
 class CheckAuthenticationView(APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [AllowAny]
-    authentication_classes = []
 
     def get(self, request, *args, **kwargs):
+        """
+        Retrieve data from the server.
+
+        """
         if request.user.is_authenticated:
             return Response(True, status=status.HTTP_200_OK)
         else:

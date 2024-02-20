@@ -5,9 +5,11 @@ import { Navigate } from "react-router-dom";
 import { authContext } from "../../Store/Context";
 
 function Register() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password1: "",
+    password2: "",
+  });
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [authentication, setAuthentication] = useState(false);
@@ -15,40 +17,39 @@ function Register() {
 
   const passwordRef = useRef();
 
-  const emailInput = (e) => {
-    setEmail(e.target.value);
-  };
-  const passwordInput = (e) => {
-    setPassword(e.target.value);
-  };
-  const passwordInput2 = (e) => {
-    setPassword2(e.target.value);
+  const handleData = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   useEffect(() => {
-    if (password2 !== "" && password2 !== password) {
+    if (
+      formData.password2 !== "" &&
+      formData.password2 !== formData.password1
+    ) {
       passwordRef.current.classList.add("wrong-password");
       setIsDisabled(true);
     } else {
       passwordRef.current.classList.remove("wrong-password");
+      setIsDisabled(false)
     }
     return () => {
-      setIsDisabled(false);
+      setIsDisabled(true);
     };
-  }, [password, password2]);
+  }, [formData.password1, formData.password2]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
-      email: email,
-      password: password,
+      email: formData.email,
+      password: formData.password1,
     };
     axios.defaults.xsrfCookieName = "csrftoken";
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
     axios.post("auth/register/", userData).then((response) => {
-      console.log(response.data);
       setAuthentication(true);
-      setAuth('login')
+      setAuth("login");
+      console.log(response);
     });
   };
 
@@ -56,10 +57,15 @@ function Register() {
     <div className="auth-container">
       <h1 className="title">Sign Up</h1>
       <form action="" className="register-form" onSubmit={handleSubmit}>
-        <label className="inp-label" htmlFor="">
+        <label className="inp-label" htmlFor="email">
           Email
         </label>
-        <input className="register-inp" type="email" onChange={emailInput} />
+        <input
+          className="register-inp"
+          type="email"
+          name="email"
+          onChange={handleData}
+        />
 
         <label className="inp-label" htmlFor="">
           Password
@@ -67,7 +73,8 @@ function Register() {
         <input
           className="register-inp"
           type="password"
-          onChange={passwordInput}
+          onChange={handleData}
+          name="password1"
         />
         <label className="inp-label" htmlFor="">
           Password(again)
@@ -76,12 +83,13 @@ function Register() {
           ref={passwordRef}
           className="register-inp"
           type="password"
-          onChange={passwordInput2}
+          onChange={handleData}
+          name="password2"
         />
 
         <button
           type="submit"
-          className="btn btn-outline-light sub-btn"
+          className="btn btn-outline-dark sub-btn"
           disabled={isDisabled}
         >
           Register

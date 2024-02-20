@@ -1,9 +1,132 @@
 @font-face {
-  font-family: "Avenir Next";
-  src: url("../public/assets/font/Font.ttf");
+  font-family: "Kanit";
+  font-weight: 100;
+  font-style: normal;
+  src: url("../public/assets/font/Kanit-Thin.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 100;
+  font-style: italic;
+  src: url("../public/assets/font/Kanit-ThinItalic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 200;
+  font-style: normal;
+  src: url("../public/assets/font/Kanit-ExtraLight.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 200;
+  font-style: italic;
+  src: url("../public/assets/font/Kanit-ExtraLightItalic.ttf")
+    format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 300;
+  font-style: normal;
+  src: url("../public/assets/font/Kanit-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 300;
+  font-style: italic;
+  src: url("../public/assets/font/Kanit-LightItalic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 400;
+  font-style: normal;
+  src: url("../public/assets/font/Kanit-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 400;
+  font-style: italic;
+  src: url("../public/assets/font/Kanit-Italic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 500;
+  font-style: normal;
+  src: url("../public/assets/font/Kanit-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 500;
+  font-style: italic;
+  src: url("../public/assets/font/Kanit-MediumItalic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 600;
+  font-style: normal;
+  src: url("../public/assets/font/Kanit-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 600;
+  font-style: italic;
+  src: url("../public/assets/font/Kanit-SemiBoldItalic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 700;
+  font-style: normal;
+  src: url("../public/assets/font/Kanit-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 700;
+  font-style: italic;
+  src: url("../public/assets/font/Kanit-BoldItalic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 800;
+  font-style: normal;
+  src: url("../public/assets/font/Kanit-ExtraBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 800;
+  font-style: italic;
+  src: url("../public/assets/font/Kanit-ExtraBoldItalic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 900;
+  font-style: normal;
+  src: url("../public/assets/font/Kanit-Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit";
+  font-weight: 900;
+  font-style: italic;
+  src: url("../public/assets/font/Kanit-BlackItalic.ttf") format("truetype");
 }
 * {
-  font-family: "Avenir Next", sans-serif;
+  /* font-family: "Avenir Next", sans-serif; */
+  font-family: "Kanit", sans-serif;
   box-sizing: border-box;
   margin: 0;
   padding: 0;

@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from shop.models import Product, Cart, CartItem
-from shop.serializers import CartItemSerializer
+from shop.serializers import CartItemSerializer, CartSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -31,25 +31,26 @@ class GetCartItems(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, is_count):
+        context = {}
         try:
             cart = Cart.objects.prefetch_related(
-                'cartitem_set').get(user=request.user)
+                'cart_items').order_by('id').get(user=request.user)
 
-            items = cart.cartitem_set.all()
+            items = cart.cart_items.all()
             if is_count == 'true':
                 item_no = items.count()
-                return Response({'count': item_no})
+                context = {'count': item_no}
             elif is_count == 'false':
-                serializer = CartItemSerializer(items, many=True)
+                serializer = CartSerializer(cart)
 
                 context = {
                     'data': serializer.data,
                     'total': cart.total
                 }
-
             return Response(context, status=status.HTTP_200_OK)
-        except:
-            return Response({'message': 'Cart is Empty'}, status=status.HTTP_204_NO_CONTENT)
+        except Cart.DoesNotExist:
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class RemoveFromCart(APIView):
@@ -76,3 +77,31 @@ class Check_In_Cart(APIView):
             return Response(True)
         except:
             return Response(False)
+
+
+class IncrementQuantity(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        user_cart = Cart.objects.get(user=request.user)
+        cart_item = CartItem.objects.get(cart=user_cart, product=id)
+
+        cart_item.quantity += 1
+        context = {'quantity': cart_item.quantity}
+        cart_item.save()
+        return Response(context, status=status.HTTP_200_OK)
+
+
+class DecrementQuantity(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        user_cart = Cart.objects.get(user=request.user)
+        cart_item = CartItem.objects.get(cart=user_cart, product=id)
+
+        cart_item.quantity -= 1
+        context = {'quantity': cart_item.quantity}
+        cart_item.save()
+        return Response(context, status=status.HTTP_200_OK)

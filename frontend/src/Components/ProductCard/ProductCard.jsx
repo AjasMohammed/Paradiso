@@ -2,7 +2,6 @@ import React from "react";
 import "./ProductCard.css";
 import { BASE_URL } from "../../Constants/config";
 import { Link } from "react-router-dom";
-import TruncateText from "../TruncateText/TruncateText";
 
 function ProductCard(props) {
   const { product } = props;
@@ -27,16 +26,13 @@ function ProductCard(props) {
             </div>
             <div className="card-body">
               <h5 className="card-title prod-name">
-                {/* <TruncateText text={product.name} max_length={20} /> */}
                 {product.name}
               </h5>
               <div className="price-tag">
               <p className="card-text current-price">
-                {/* <span className="price-tag">Price: </span> */}
                 {rupeeFormatter.format(product.current_price)}
               </p>
               <p className="card-text raw-price">
-                {/* <span className="price-tag">Price: </span> */}
                 <del>{rupeeFormatter.format(product.raw_price)}</del>
               </p>
               </div>

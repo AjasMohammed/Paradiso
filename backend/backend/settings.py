@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'home',
     'authentication',
     'shop',
+    'payments',
 
 ]
 
@@ -108,10 +109,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
-    'secondary': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('NAME'),
         'USER': config('USER'),
@@ -121,7 +118,6 @@ DATABASES = {
     },
 }
 
-DATABASE_ROUTERS = ['shop.router.ShopRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -185,3 +181,5 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',)
 }
+
+STRIPE_API_KEY = config('STRIPE_KEY')
