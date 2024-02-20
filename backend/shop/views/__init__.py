@@ -14,7 +14,8 @@ from .cart_view import DecrementQuantity
 
 from .favorites_view import ViewFavorite
 
-from .order_view import PlaceOrder
+from .order_view import OrderView
+from .order_view import OrderConformation
 
 from .search_query_view import SearchQuery
 

@@ -1,76 +1,105 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "./StripeForm.css";
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import axios from "../../Constants/axios";
-import { cartContext } from "../../Store/Context";
+import {
+  useElements,
+  useStripe,
+  PaymentElement,
+} from "@stripe/react-stripe-js";
 
-function StripeForm({ onPaymentDetails }) {
+function StripeForm({ onPaymentDetails, options }) {
   const [error, setError] = useState(null);
-  const [email, setEmail] = useState("");
   const stripe = useStripe();
   const elements = useElements();
 
-  const { totalAmount } = useContext(cartContext);
+  const [message, setMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Handle real-time validation errors from the CardElement.
-  const handleChange = (event) => {
-    if (event.error) {
-      setError(event.error.message);
-    } else {
-      setError(null);
-    }
+  const paymentElementOptions = {
+    layout: "tabs",
   };
 
-  // Handle form submission.
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const card = elements.getElement(CardElement);
-    const { paymentMethod, error } = await stripe.createPaymentMethod({
-      type: "card",
-      card: card,
+  useEffect(() => {
+    if (!stripe) {
+      return;
+    }
+
+    const clientSecret = options.clientSecret;
+
+    if (!clientSecret) {
+      return;
+    }
+    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+      switch (paymentIntent.status) {
+        case "succeeded":
+          setMessage("Payment succeeded!");
+          onPaymentDetails();
+          break;
+        case "processing":
+          setMessage("Your payment is processing.");
+          break;
+        case "requires_payment_method":
+          setMessage("Your payment was not successful, please try again.");
+          setIsLoading(false)
+          break;
+        default:
+          setMessage("Something went wrong.");
+          setIsLoading(false)
+          break;
+      }
     });
-    const data = {
-      payment_method_id: paymentMethod.id,
-      email: email,
-      total: totalAmount
+    return () => {
+      setMessage("");
     };
-    axios.post("/payments/payment/", data).then((response) => {
-      console.log(response.data);
-      onPaymentDetails();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!stripe || !elements) {
+      // Stripe.js hasn't yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
+      return;
+    }
+    setIsLoading(true);
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      redirect: "if_required",
+      confirmParams: {
+        // Make sure to change this to your payment completion page
+        return_url: "",
+      },
     });
+
+    // This point will only be reached if there is an immediate error when
+    // confirming the payment. Otherwise, your customer will be redirected to
+    // your `return_url`. For some payment methods like iDEAL, your customer will
+    // be redirected to an intermediate site first to authorize the payment, then
+    // redirected to the `return_url`.
+    if (error) {
+      if (error.type === "card_error" || error.type === "validation_error") {
+        setMessage(error.message);
+      } else {
+        console.log(error);
+        setMessage("An unexpected error occurred.");
+      }
+    }else if (paymentIntent && paymentIntent.status == "succeeded"){
+      onPaymentDetails(paymentIntent.id)
+    }
+    console.log(paymentIntent);
+    
+    setIsLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="stripe-form">
-      <div className="form-row">
-        <label htmlFor="email">Email Address</label>
-        <br />
-        <input
-          className="form-control"
-          id="email"
-          name="name"
-          type="email"
-          placeholder="jenny.rosen@example.com"
-          required
-          value={email}
-          onChange={(event) => {
-            setEmail(event.target.value);
-          }}
-        />
-
-        <label for="card-element">Credit or Debit Card</label>
-        <CardElement
-          id="card-element"
-          className="form-control"
-          onChange={handleChange}
-        />
-        <div className="card-errors" role="alert">
-          {error}
-        </div>
-      </div>
-      <button type="submit" className="submit-btn btn btn-dark">
-        Submit Payment
+    <form id="payment-form" onSubmit={handleSubmit}>
+      <PaymentElement id="payment-element" options={paymentElementOptions} />
+      <button disabled={isLoading || !stripe || !elements} id="submit">
+        <span id="button-text">
+          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
+        </span>
       </button>
+      {/* Show any error or success messages */}
+      {message && <div id="payment-message">{message}</div>}
     </form>
   );
 }

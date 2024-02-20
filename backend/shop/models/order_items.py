@@ -5,6 +5,7 @@ from shop.models import Order, Product
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
 
     class Meta:
         app_label = 'shop'
@@ -13,4 +14,4 @@ class OrderItem(models.Model):
         db_table = "order_item"
 
     def __str__(self):
-        return f"{self.pk}-{self.order.pk}"
+        return f"{self.product.name}-{self.pk}-{self.order.pk}"

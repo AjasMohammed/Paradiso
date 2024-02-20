@@ -17,6 +17,7 @@ urlpatterns = [
     path('get-cart-items/<str:is_count>/', GetCartItems.as_view(), name='get_cart_items'),
     path('favorite/', ViewFavorite.as_view(), name='favorite'),
     path('favorite/<int:id>/', ViewFavorite.as_view(), name='favorite'),
-    path('place-order/', PlaceOrder.as_view(), name='place_order'),
+    path('place-order/', OrderView.as_view(), name='place_order'),
+    path('confirm-order/<int:id>/', OrderConformation.as_view(), name='confirm_order'),
     path('search-query/', SearchQuery.as_view(), name='search_query'),
 ]

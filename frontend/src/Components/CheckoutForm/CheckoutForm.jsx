@@ -11,16 +11,9 @@ function CheckoutForm(props) {
   const [address, setAddress] = useState(null);
   const [city, setCity] = useState(null);
   const [zipCode, setZipCode] = useState(null);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const prodId = cartItems.map((item)=>{
-    //   let data = {
-    //     product: item.id,
-    //     // quantity: 1
-    //   }
-    //   return data
-    // })
-    // console.log(prodId);
     const data = {
       phone: phone,
       address: address,
@@ -29,15 +22,17 @@ function CheckoutForm(props) {
       amount: totalAmount,
       products: cartItems,
     };
-    // axios.defaults.xsrfCookieName = "csrftoken";
-    // axios.defaults.xsrfHeaderName = "X-CSRFToken";
-    // axios.post("shop/place-order/", data).then((response) => {
-    //   if (response.status === 200){
-    //     onUserDetails()
-    //   }
-    // });
-    onUserDetails()
+    axios.defaults.xsrfCookieName = "csrftoken";
+    axios.defaults.xsrfHeaderName = "X-CSRFToken";
+    axios.post("shop/place-order/", data).then((response) => {
+      if (response.status === 200){
+        onUserDetails(response.data.order_id)
+      }
+    });
+    // onUserDetails()
   };
+
+
   return (
     <>
       <div className="order-form">

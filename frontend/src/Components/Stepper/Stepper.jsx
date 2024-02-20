@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useState} from "react";
 import "./Stepper.css";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
@@ -9,20 +9,15 @@ import Typography from "@mui/material/Typography";
 
 import CheckoutForm from "../CheckoutForm/CheckoutForm";
 import StripeElement from "../StripeElement/StripeElement";
+import OrderConfirm from "../OrderConfirm/OrderConfirm";
+import axios from "../../Constants/axios";
 
 const steps = ["Enter User Details", "Enter Payment Details", "Order Details"];
 
-const checkoutComponents = [<CheckoutForm />, <StripeElement />];
-
 export default function HorizontalNonLinearStepper() {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [completed, setCompleted] = React.useState({});
-
-  // const [userDetails, setUserDetails] = React.useState({
-  //   // Define initial user details
-  //   // Example: name: "", email: ""
-  // });
-  // const [paymentDetails, setPaymentDetails] = React.useState({});
+  const [activeStep, setActiveStep] = useState(0);
+  const [completed, setCompleted] = useState({});
+  const [orderId, setOrderId] = useState(null);
 
   const totalSteps = () => {
     return steps.length;
@@ -74,18 +69,24 @@ export default function HorizontalNonLinearStepper() {
     setCompleted({});
   };
 
-  // const handleUserDetails = (details) => {
-  //   setUserDetails(details);
+  const handleUserDetails = (details) => {
+    setOrderId(details);
 
-  //   handleComplete();
-  // };
+    handleComplete();
+  };
 
-  // // Callback function to receive payment details from StripeElement
-  // const handlePaymentDetails = (details) => {
-  //   setPaymentDetails(details);
-  //   // axios.post("shop/place-order/", details);
-  //   handleComplete();
-  // };
+  // Callback function to receive payment details from StripeElement
+  const handlePaymentDetails = (paymentId) => {
+    const data = {
+      payment_id : paymentId
+    }
+    axios.post(`shop/confirm-order/${orderId}/`, data).then((response) => {
+      if (response.status === 200) {
+        handleComplete();
+        // setOrderId(null)
+      }
+    });
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -100,7 +101,7 @@ export default function HorizontalNonLinearStepper() {
       </Stepper>
       <div id="stepper">
         {allStepsCompleted() ? (
-          <React.Fragment>
+          <>
             <Typography sx={{ mt: 2, mb: 1 }}>
               All steps completed - you&apos;re finished
             </Typography>
@@ -108,27 +109,29 @@ export default function HorizontalNonLinearStepper() {
               <Box sx={{ flex: "1 1 auto" }} />
               <Button onClick={handleReset}>Reset</Button>
             </Box>
-          </React.Fragment>
+          </>
         ) : (
-          <React.Fragment>
+          <>
             <div className="checkout-components">
               {activeStep === 0 && (
-                <CheckoutForm onUserDetails={handleComplete} />
+                <CheckoutForm onUserDetails={handleUserDetails} />
               )}
               {activeStep === 1 && (
-                <StripeElement onPaymentDetails={handleComplete} />
+                <StripeElement onPaymentDetails={handlePaymentDetails} />
               )}
+              {activeStep === 2 && <OrderConfirm orderId={orderId} />}
             </div>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button
-                className="btn"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1, color: "#000" }}
-              >
-                Back
-              </Button>
-              {/* <Box sx={{ flex: "1 1 auto" }} />
+            {activeStep !== 2 && (
+              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                <Button
+                  className="btn"
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  sx={{ mr: 1, color: "#000" }}
+                >
+                  Back
+                </Button>
+                {/* <Box sx={{ flex: "1 1 auto" }} />
               <Button onClick={handleNext} sx={{ mr: 1 }}>
                 Next
               </Button>
@@ -147,8 +150,9 @@ export default function HorizontalNonLinearStepper() {
                       : "Complete Step"}
                   </Button>
                 ))} */}
-            </Box>
-          </React.Fragment>
+              </Box>
+            )}
+          </>
         )}
       </div>
     </Box>

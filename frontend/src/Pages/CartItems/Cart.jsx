@@ -4,7 +4,6 @@ import axios from "../../Constants/axios";
 import { cartContext } from "../../Store/Context";
 import { Link } from "react-router-dom";
 import CheckoutCard from "../../Components/CheckoutCard/CheckoutCard";
-import CheckoutForm from "../../Components/CheckoutForm/CheckoutForm";
 
 function Cart() {
   const { cartItems, setCartItems } = useContext(cartContext);
