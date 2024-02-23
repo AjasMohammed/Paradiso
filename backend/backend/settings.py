@@ -14,6 +14,7 @@ from datetime import timedelta
 from pathlib import Path
 import os
 from decouple import config
+import redis
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -183,3 +184,17 @@ SIMPLE_JWT = {
 }
 
 STRIPE_API_KEY = config('STRIPE_KEY')
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+    }
+}
+
+# # Creates a Redis connection pool 
+# REDIS_POOL = redis.ConnectionPool(host='localhost', port=6379, db=0)
+
+# # Creates a Redis client instance
+# REDIS_CLIENT = redis.Redis(connection_pool=REDIS_POOL)
