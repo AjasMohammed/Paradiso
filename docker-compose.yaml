@@ -1,0 +1,35 @@
+version: "3"
+services:
+  frontend:
+    build: /frontend/
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    # volumes:
+    #   - .:/Paradiso
+    networks:
+      - paradiso-net
+
+  backend:
+    build: /backend/
+    container_name: backend
+    environment:
+      - HOST=host.docker.internal  # to connect DB in local machine
+    ports:
+      - "8000:8000"
+    volumes:
+      - static:/Paradiso/static_root
+      - ./media:/Paradiso/media
+    #   - .:/Paradiso
+    depends_on:
+      - frontend
+    networks:
+      - paradiso-net
+
+networks:
+  paradiso-net:
+    driver: bridge
+volumes:
+  # Paradiso:
+  static:
+  media:
