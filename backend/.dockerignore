@@ -1,0 +1,9 @@
+# Exclude common files and directories
+.git
+.idea
+__pycache__
+*.pyc
+
+# Exclude development files
+*.log
+*.sqlite3

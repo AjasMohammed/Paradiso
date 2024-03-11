@@ -8,6 +8,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.db.models import Window, F
 from django.db.models.functions import RowNumber
 from Utility.set_cache_headers import set_cache_headers
+from django.core.cache import cache
 
 
 class ProductsView(APIView):
@@ -19,6 +20,11 @@ class ProductsView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, format=None):
+        cached_data = cache.get('products')
+        if cached_data:
+            response = set_cache_headers(Response(cached_data, status=status.HTTP_200_OK))
+            return response
+    
         products = Product.objects.annotate(
             row_number=Window(
                 expression=RowNumber(),
@@ -35,6 +41,7 @@ class ProductsView(APIView):
                 ordered_products[category_name] = []
             ordered_products[category_name].append(item)
 
+        cache.set('products', ordered_products, 3600)
         response = set_cache_headers(Response(ordered_products, status=status.HTTP_200_OK))
 
         return response

@@ -14,6 +14,7 @@ from datetime import timedelta
 from pathlib import Path
 import os
 from decouple import config
+import redis
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +30,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -88,7 +89,8 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(REAL_BASE_DIR, 'frontend', 'build')],
+        # 'DIRS': [os.path.join(REAL_BASE_DIR, 'frontend', 'build')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -157,6 +159,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(REAL_BASE_DIR, 'static_root')
 STATICFILES_DIRS = [os.path.join(REAL_BASE_DIR, 'frontend', 'build', 'static')]
 
 
@@ -183,3 +186,17 @@ SIMPLE_JWT = {
 }
 
 STRIPE_API_KEY = config('STRIPE_KEY')
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+    }
+}
+
+# # Creates a Redis connection pool 
+# REDIS_POOL = redis.ConnectionPool(host='localhost', port=6379, db=0)
+
+# # Creates a Redis client instance
+# REDIS_CLIENT = redis.Redis(connection_pool=REDIS_POOL)

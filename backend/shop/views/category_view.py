@@ -22,10 +22,9 @@ class CategoryProducts(APIView):
         category_name = request.query_params.get('category')
         subcategory_name = request.query_params.get('subcategory')
 
-        products = Product.objects.filter(category__name=category_name)
+        products = Product.objects.select_related('category', 'subcategory').filter(category__name=category_name)
         if subcategory_name != 'undefined':
             products = products.filter(subcategory__name=subcategory_name)
-        products = products.select_related('category', 'subcategory')
 
         serializer = CategoryProductSerializer(products, many=True)
         response = set_cache_headers(
